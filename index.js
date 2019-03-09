@@ -16,83 +16,6 @@ var bot = linebot({
 
 
 
-//========================================
-// 機器人接受訊息的處理
-//========================================
-bot.on('message', function(event) {
-	event.reply({
-        "type": "template",
-        "altText": "這是一個輪播樣板",
-        "template": {
-            "type": "carousel",
-            "columns": [
-                {
-                  "thumbnailImageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg",
-                  "imageBackgroundColor": "#FFFFFF",
-                  "title": "星夜",
-                  "text": "荷蘭後印象派畫家文森特·梵谷於1890年在法國聖雷米的一家精神病院裏創作的一幅著名油畫",
-                  "defaultAction": {
-                      "type": "uri",
-                      "label": "詳細資料",
-                      "uri": "https://zh.wikipedia.org/wiki/星夜"
-                  },
-                  "actions": [
-                      {
-                          "type": "postback",
-                          "label": "買了",
-                          "data": "action=buy&itemid=111"
-                      },
-                      {
-                          "type": "postback",
-                          "label": "加入購物車",
-                          "data": "action=add&itemid=111"
-                      },
-                      {
-                          "type": "uri",
-                          "label": "詳細資料",
-                          "uri": "https://zh.wikipedia.org/wiki/星夜"
-                      }
-                  ]
-                },
-                {
-                  "thumbnailImageUrl": "https://class-4233.herokuapp.com/imgs/p02.jpg",
-                  "imageBackgroundColor": "#000000",
-                  "title": "向日葵",
-                  "text": "荷蘭畫家梵谷繪畫的一系列靜物油畫。當中有2幅繪有15朵向日葵，與1幅繪有十四朵向日葵，另有兩幅繪有12朵向日葵。",
-                  "defaultAction": {
-                      "type": "uri",
-                      "label": "詳細資料",
-                      "uri": "https://zh.wikipedia.org/wiki/向日葵_(梵高)"
-                  },
-                  "actions": [
-                    {
-                        "type": "postback",
-                        "label": "買了",
-                        "data": "action=buy&itemid=222"
-                    },
-                    {
-                        "type": "postback",
-                        "label": "加入購物車",
-                        "data": "action=add&itemid=222"
-                    },
-                      {
-                          "type": "uri",
-                          "label": "詳細資料",
-                          "uri": "https://zh.wikipedia.org/wiki/向日葵_(梵高)"
-                      }
-                  ]
-                }
-
-
-            ],
-            "imageAspectRatio": "rectangle",
-            "imageSize": "cover"
-        }
-    });
-});
-
-
-
 
 //========================================
 // 機器人接受回覆的處理
@@ -121,6 +44,48 @@ bot.on('postback', function(event) {
     });
 });
 
+
+
+
+
+//========================================
+// 機器人接受訊息的處理
+//========================================
+bot.on('message', function(event) {
+    event.reply({
+        "type": "template",
+        "altText": "this is a image carousel template",
+        "template": {
+            "type": "image_carousel",
+            "columns": [
+                {
+                    "imageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg",
+                    "action": {
+                        "type": "postback",
+                        "label": "星夜",
+                        "data": "1"
+                    }
+                },
+                {
+                    "imageUrl": "https://class-4233.herokuapp.com/imgs/p02.jpg",
+                    "action": {
+                        "type": "postback",
+                        "label": "向日葵",
+                        "data": "2"
+                    }
+                },
+                {
+                    "imageUrl": "https://class-4233.herokuapp.com/imgs/p03.jpg",
+                    "action": {
+                        "type": "postback",
+                        "label": "夜晚的露天咖啡座",
+                        "data": "3"
+                    }
+                }
+            ]
+        }
+    });
+});
 
 
 
