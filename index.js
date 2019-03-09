@@ -30,6 +30,19 @@ else{
 }
 });
 
+bot.on('message', function(event) {
+    event.source.profile().then(
+        function (profile) {            
+            return event.reply({
+                "type": "image",
+                "originalContentUrl": "https://test-4233.herokuapp.com/imgs/p01.jpg",
+                "previewImageUrl": "https://test-4233.herokuapp.com/imgs/p01.jpg"
+            });	            
+        }
+    );
+});
+
+
 
 //----------------------------------------
 // 建立一個網站應用程式app
