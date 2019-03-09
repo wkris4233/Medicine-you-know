@@ -48,17 +48,6 @@ bot.on('message', function(event) {
     );
 });
 
-bot.on('message', function(event) {
-    event.source.profile().then(
-        function (profile) {            
-            return event.reply({
-                "type": "sticker",
-                "packageId": "2",   //packageId可輸入1~4
-                "stickerId": "1"
-            });	            
-        }
-    );
-});
 
 
 //----------------------------------------
