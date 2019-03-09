@@ -23,8 +23,8 @@ bot.on('message', function(event) {
         function (profile) {            
             return event.reply({
                 "type": "image",
-                "originalContentUrl": "https://test-4233.herokuapp.com/imgs/p01.jpg",
-                "previewImageUrl": "https://test-4233.herokuapp.com/imgs/p01.jpg"
+                "originalContentUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg",
+                "previewImageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg"
             });	            
         }
     );
