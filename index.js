@@ -20,18 +20,24 @@ var bot = linebot({
 //----------------------------------------
 bot.on('message', function(event) {
     event.source.profile().then(
-        function (profile) {            
-            return event.reply({
+        function (profile) {        
+            
+            if(Message.event.text ==1){
+                return event.reply({
                 "type": "image",
                 "originalContentUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg",
                 "previewImageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg"
             });
+        }
             
+        else{
             return event.reply({
-                "type": "image",
-                "originalContentUrl": "https://class-4233.herokuapp.com/imgs/main.png",
-                "previewImageUrl": "https://class-4233.herokuapp.com/imgs/main.png"
-            });
+            "type": "image",
+            "originalContentUrl": "https://class-4233.herokuapp.com/imgs/main.png",
+            "previewImageUrl": "https://class-4233.herokuapp.com/imgs/main.png"
+        });}
+            
+            
         }
     );
 });
