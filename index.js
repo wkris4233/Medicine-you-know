@@ -20,36 +20,6 @@ var bot = linebot({
 //----------------------------------------
 bot.on('message', function(event) {
     event.source.profile().then(
-        function (profile) {
-            var name = profile.displayName;
-            var userId = profile.userId;
-            var msg = event.message.text;
-            
-            return event.reply([
-                {
-                    "type": "text",
-                    "text": name
-                },
-                {
-                    "type": "text",
-                    "text": userId
-                },
-                {
-                    "type": "text",
-                    "text": msg
-                },
-                {
-                    "type": "sticker",
-                    "packageId": "2",   //packageId可輸入1~4
-                    "stickerId": "1" 
-                }
-            ]);	            
-        }
-    );
-});
-
-bot.on('message', function(event) {
-    event.source.profile().then(
         function (profile) {            
             return event.reply({
                 "type": "location",
