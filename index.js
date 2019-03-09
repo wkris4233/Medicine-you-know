@@ -19,13 +19,12 @@ var bot = linebot({
 // 機器人接受訊息的處理
 //----------------------------------------
 bot.on('message', function(event) {
-    event.reply({
-        "type": "video",
-        "originalContentUrl": "https://class-4233.herokuapp.com/video/v01.mp4",
-        "previewImageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg"
+	event.reply({
+        "type": "audio",
+        "originalContentUrl": "https://class-4233.herokuapp.com/audio/a01.mp3",
+        "duration": 1000  //1秒
     });
 });
-
 
 
 //----------------------------------------
