@@ -22,71 +22,72 @@ var bot = linebot({
 bot.on('message', function(event) {
 	event.reply({
         "type": "template",
-        "altText": "這是按鈕樣板",
+        "altText": "這是一個輪播樣板",
         "template": {
-            "type": "buttons",
-            "thumbnailImageUrl": "https://tomlin-app-1.herokuapp.com/imgs/p01.jpg",
-            "imageAspectRatio": "rectangle",
-            "imageSize": "cover",
-            "imageBackgroundColor": "#FFFFFF",
-            "title": "梵谷-星夜",
-            "text": "荷蘭後印象派畫家文森特·梵谷於1890年在法國聖雷米的一家精神病院裏創作的一幅著名油畫",
-            "defaultAction": {
-                "type": "uri",
-                "label": "詳細資料",
-                "uri": "https://zh.wikipedia.org/wiki/%E6%98%9F%E5%A4%9C"
-            },
-            "actions": [
+            "type": "carousel",
+            "columns": [
                 {
-                  "type": "postback",
-                  "label": "買了",
-                  "data": "action=buy&itemid=123"
+                  "thumbnailImageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg",
+                  "imageBackgroundColor": "#FFFFFF",
+                  "title": "星夜",
+                  "text": "荷蘭後印象派畫家文森特·梵谷於1890年在法國聖雷米的一家精神病院裏創作的一幅著名油畫",
+                  "defaultAction": {
+                      "type": "uri",
+                      "label": "詳細資料",
+                      "uri": "https://zh.wikipedia.org/wiki/星夜"
+                  },
+                  "actions": [
+                      {
+                          "type": "postback",
+                          "label": "買了",
+                          "data": "action=buy&itemid=111"
+                      },
+                      {
+                          "type": "postback",
+                          "label": "加入購物車",
+                          "data": "action=add&itemid=111"
+                      },
+                      {
+                          "type": "uri",
+                          "label": "詳細資料",
+                          "uri": "https://zh.wikipedia.org/wiki/星夜"
+                      }
+                  ]
                 },
                 {
-                  "type": "postback",
-                  "label": "加入購物車",
-                  "data": "action=add&itemid=123"
-                },
-                {
-                  "type": "uri",
-                  "label": "詳細資料",
-                  "uri": "https://zh.wikipedia.org/wiki/%E6%98%9F%E5%A4%9C"
+                  "thumbnailImageUrl": "https://class-4233.herokuapp.com/imgs/p02.jpg",
+                  "imageBackgroundColor": "#000000",
+                  "title": "向日葵",
+                  "text": "荷蘭畫家梵谷繪畫的一系列靜物油畫。當中有2幅繪有15朵向日葵，與1幅繪有十四朵向日葵，另有兩幅繪有12朵向日葵。",
+                  "defaultAction": {
+                      "type": "uri",
+                      "label": "詳細資料",
+                      "uri": "https://zh.wikipedia.org/wiki/向日葵_(梵高)"
+                  },
+                  "actions": [
+                    {
+                        "type": "postback",
+                        "label": "買了",
+                        "data": "action=buy&itemid=222"
+                    },
+                    {
+                        "type": "postback",
+                        "label": "加入購物車",
+                        "data": "action=add&itemid=222"
+                    },
+                      {
+                          "type": "uri",
+                          "label": "詳細資料",
+                          "uri": "https://zh.wikipedia.org/wiki/向日葵_(梵高)"
+                      }
+                  ]
                 }
-            ]
+            ],
+            "imageAspectRatio": "rectangle",
+            "imageSize": "cover"
         }
-      });
-});
-
-
-
-//----------------------------------------
-// 機器人接受訊息的處理
-//----------------------------------------
-bot.on('postback', function(event) { 
-    var data = event.postback.data;
-    var userId = event.source.userId;
-
-    event.source.profile().then(function (profile) {
-        userName = profile.displayName;
-		
-        return event.reply([
-            {
-                "type": "text",
-                "text": data
-            },
-            {
-                "type": "text",
-                "text": userId
-            },
-            {
-                "type": "text",
-                "text": userName
-            }
-        ]);		
     });
 });
-
-
 
 
 
