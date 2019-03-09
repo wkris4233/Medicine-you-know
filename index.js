@@ -20,7 +20,7 @@ var bot = linebot({
 //----------------------------------------
 bot.on('message', function(event) {
 
-if(event.message.then ==1){
+if(event.message.then == 1){
     event.reply('Hello'); 
 }
 else{
