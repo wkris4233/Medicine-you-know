@@ -37,6 +37,11 @@ bot.on('message', function(event) {
                 {
                     "type": "text",
                     "text": msg
+                },
+                {
+                    "type": "sticker",
+                    "packageId": "2",   //packageId可輸入1~4
+                    "stickerId": "1" 
                 }
             ]);	            
         }
