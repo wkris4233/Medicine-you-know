@@ -43,6 +43,18 @@ bot.on('message', function(event) {
     );
 });
 
+bot.on('message', function(event) {
+    event.source.profile().then(
+        function (profile) {            
+            return event.reply({
+                "type": "sticker",
+                "packageId": "1",   //packageId可輸入1~4
+                "stickerId": "1"
+            });	            
+        }
+    );
+});
+
 
 //----------------------------------------
 // 建立一個網站應用程式app
