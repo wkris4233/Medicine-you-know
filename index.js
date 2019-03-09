@@ -19,27 +19,11 @@ var bot = linebot({
 // 機器人接受訊息的處理
 //----------------------------------------
 bot.on('message', function(event) {
-    event.source.profile().then(
-        function (profile) {        
-            
-            if(Message.event.text ==1){
-                return event.reply({
-                "type": "image",
-                "originalContentUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg",
-                "previewImageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg"
-            });
-        }
-            
-        else{
-            return event.reply({
-            "type": "image",
-            "originalContentUrl": "https://class-4233.herokuapp.com/imgs/main.png",
-            "previewImageUrl": "https://class-4233.herokuapp.com/imgs/main.png"
-        });}
-            
-            
-        }
-    );
+    event.reply({
+        "type": "video",
+        "originalContentUrl": "https://class-4233.herokuapp.com/video/v01.mp4",
+        "previewImageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg"
+    });
 });
 
 
