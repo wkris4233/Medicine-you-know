@@ -37,7 +37,7 @@ bot.on('message', function(event) {
 		  
             student.fetchOneStudent(no).then(d => {
                 if (d.data.length > 0){
-                    event.reply(d.data[0].stuname);  //回覆學生姓名
+                    event.reply(d.data[0].course);  //回覆學生姓名
                 }else{
                     event.reply('找不到資料');        //回覆找不到
                 }  
