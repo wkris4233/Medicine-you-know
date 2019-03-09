@@ -19,7 +19,7 @@ var bot = linebot({
 // 機器人接受訊息的處理
 //----------------------------------------
 bot.on('message', function(event) {
-    event.reply('Hello, 你好');  
+    event.reply('Hello, 你好你好');  
 });
 
 
