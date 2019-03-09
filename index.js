@@ -25,7 +25,13 @@ bot.on('message', function(event) {
                 "type": "image",
                 "originalContentUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg",
                 "previewImageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg"
-            });	            
+            });
+            
+            return event.reply({
+                "type": "image",
+                "originalContentUrl": "https://class-4233.herokuapp.com/imgs/main.png",
+                "previewImageUrl": "https://class-4233.herokuapp.com/imgs/main.png"
+            });
         }
     );
 });
