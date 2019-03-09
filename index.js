@@ -19,19 +19,14 @@ var bot = linebot({
 // 機器人接受訊息的處理
 //----------------------------------------
 bot.on('message', function(event) {
-    event.source.profile().then(
-        function (profile) {            
-            return event.reply({
-                "type": "location",
-                "title": "國立臺北商業大學",
-                "address": "台北市濟南路1段321號",
-                "latitude": 25.042039,
-                "longitude": 121.525592
-            });	            
-        }
-    );
-});
 
+if(event.message.then==1){
+    event.reply('Hello'); 
+}
+else{
+    event.reply('Hello, 你好');
+}
+});
 
 
 //----------------------------------------
