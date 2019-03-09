@@ -48,7 +48,7 @@ bot.on('message', function(event) {
         function (profile) {            
             return event.reply({
                 "type": "sticker",
-                "packageId": "1",   //packageId可輸入1~4
+                "packageId": "2",   //packageId可輸入1~4
                 "stickerId": "1"
             });	            
         }
