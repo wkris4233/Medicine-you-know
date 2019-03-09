@@ -4,6 +4,9 @@
 var linebot = require('linebot');
 var express = require('express');
 
+//增加引用函式
+const student = require('./utility/student.js');
+
 
 //----------------------------------------
 // 填入自己在Line Developers的channel值
@@ -17,75 +20,32 @@ var bot = linebot({
 
 
 
-//========================================
-// 機器人接受回覆的處理
-//========================================
-bot.on('postback', function(event) { 
-    var data = event.postback.data;
-    var userId = event.source.userId;
-
-    event.source.profile().then(function (profile) {
-        userName = profile.displayName;
-		
-        return event.reply([
-            {
-                "type": "text",
-                "text": data
-            },
-            {
-                "type": "text",
-                "text": userId
-            },
-            {
-                "type": "text",
-                "text": userName
-            }
-        ]);		
-    });
-});
-
-
-
 
 
 //========================================
 // 機器人接受訊息的處理
 //========================================
-bot.on('message', function(event) {
-    event.reply({
-        "type": "template",
-        "altText": "this is a image carousel template",
-        "template": {
-            "type": "image_carousel",
-            "columns": [
-                {
-                    "imageUrl": "https://class-4233.herokuapp.com/imgs/p01.jpg",
-                    "action": {
-                        "type": "postback",
-                        "label": "星夜",
-                        "data": "1"
-                    }
-                },
-                {
-                    "imageUrl": "https://class-4233.herokuapp.com/imgs/p02.jpg",
-                    "action": {
-                        "type": "postback",
-                        "label": "向日葵",
-                        "data": "2"
-                    }
-                },
-                {
-                    "imageUrl": "https://class-4233.herokuapp.com/imgs/p03.jpg",
-                    "action": {
-                        "type": "postback",
-                        "label": "夜晚的露天咖啡座",
-                        "data": "3"
-                    }
-                }
-            ]
+bot.on('message', function(event) {    
+    event.source.profile().then(
+        function (profile) {	
+            //取得使用者資料
+            var userName = profile.displayName;
+            var userId = profile.userId;
+	    
+	    //使用者傳來的學號
+            var no = event.message.text;		
+		  
+            student.fetchOneStudent(no).then(d => {
+                if (d.data.length > 0){
+                    event.reply(d.data[0].stuname);  //回覆學生姓名
+                }else{
+                    event.reply('找不到資料');        //回覆找不到
+                }  
+            })  
         }
-    });
+    );
 });
+
 
 
 
