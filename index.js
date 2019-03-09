@@ -16,6 +16,47 @@ var bot = linebot({
 
 
 
+//========================================
+// 機器人接受訊息的處理
+//========================================
+bot.on('message', function(event) {
+	event.reply({
+        "type": "template",
+        "altText": "這是按鈕樣板",
+        "template": {
+            "type": "buttons",
+            "thumbnailImageUrl": "https://tomlin-app-1.herokuapp.com/imgs/p01.jpg",
+            "imageAspectRatio": "rectangle",
+            "imageSize": "cover",
+            "imageBackgroundColor": "#FFFFFF",
+            "title": "梵谷-星夜",
+            "text": "荷蘭後印象派畫家文森特·梵谷於1890年在法國聖雷米的一家精神病院裏創作的一幅著名油畫",
+            "defaultAction": {
+                "type": "uri",
+                "label": "詳細資料",
+                "uri": "https://zh.wikipedia.org/wiki/%E6%98%9F%E5%A4%9C"
+            },
+            "actions": [
+                {
+                  "type": "postback",
+                  "label": "買了",
+                  "data": "action=buy&itemid=123"
+                },
+                {
+                  "type": "postback",
+                  "label": "加入購物車",
+                  "data": "action=add&itemid=123"
+                },
+                {
+                  "type": "uri",
+                  "label": "詳細資料",
+                  "uri": "https://zh.wikipedia.org/wiki/%E6%98%9F%E5%A4%9C"
+                }
+            ]
+        }
+      });
+});
+
 
 
 //----------------------------------------
