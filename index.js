@@ -59,7 +59,7 @@ bot.on('message', function(event) {
 //--------------------------------
 // 機器人接受訊息的處理
 //--------------------------------
-bot.on('message', function(event2) {    
+bot.on('message2', function(event2) {    
     event2.source.profile().then(
         function (profile) {
             //取得使用者資料
