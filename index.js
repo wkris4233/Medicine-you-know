@@ -34,8 +34,7 @@ bot.on('message', function(event) {
 	    
             //使用者傳來的學號
             const no = event.message.text;
-            const no2 = event.message.text;
-            
+                        
 
         //呼叫API取得成績資料
         student.fetchScores(no).then(data => {  
