@@ -59,7 +59,7 @@ bot.on('message', function(event) {
 //--------------------------------
 // 機器人接受訊息的處理
 //--------------------------------
-bot.on('message2', function(event2) {    
+bot.on('message2', function(event) {    
     event2.source.profile().then(
         function (profile) {
             //取得使用者資料
@@ -67,14 +67,14 @@ bot.on('message2', function(event2) {
             const userId = profile.userId;
 	    
             //使用者傳來的學號
-            const no2 = event2.message.text;
+            const no2 = event.message2.text;
           
             //呼叫API取得各科目平均成績
             student.avgScoreByCourse().then(data => {  
                 if (data == -1){
-                    event2.reply('找不到資料');
+                    event.reply('找不到資料');
                 }else if(data == -9){                    
-                    event2.reply('執行錯誤');
+                    event.reply('執行錯誤');
                 }else{
                     let msg='';
                     let firstLine = true;
@@ -88,7 +88,7 @@ bot.on('message2', function(event2) {
                         msg = msg + item.course + ':' + Math.round(item.avg*100)/100;                                                
                     });
 
-                    event2.reply({type:'text', text: msg});
+                    event.reply({type:'text', text: msg});
                 }  
             })  
         }
