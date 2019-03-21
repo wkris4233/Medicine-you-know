@@ -52,28 +52,7 @@ var fetchScores = async function(stuNo){
 
 
 
-//------------------------------------------
-// 取出所有學生各科平均成績
-//------------------------------------------
-var avgScoreByCourse = async function(){
-    //存放結果
-    let result; 
 
-    //讀取資料庫
-    await query('select a.course, avg(b.score) as avg from course a, score b where a.couno = b.couno group by a.course')
-        .then((data) => {   
-            if(data.rows.length > 0){
-                result = data.rows;   //平均成績資料(陣列)
-            }else{
-                result = -1;  //找不到資料
-            }                      
-        }, (error) => {
-            result = -9;  //執行錯誤
-        });
-
-    //回傳執行結果		
-    return result;
-}
 
 
 
