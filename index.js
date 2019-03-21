@@ -21,7 +21,6 @@ var bot = linebot({
 
 
 
-
 //--------------------------------
 // 機器人接受訊息的處理
 //--------------------------------
@@ -34,57 +33,32 @@ bot.on('message', function(event) {
 	    
             //使用者傳來的學號
             const no = event.message.text;
-                        
-
-        //呼叫API取得成績資料
-        student.fetchScores(no).then(data => {  
-            if (data == -1){
-            event.reply('找不到資料');
-            }else if(data == -9){                    
-            event.reply('執行錯誤');
-            }else{
-            let msg='';
-            let firstLine = true;
-    
-            data.forEach(item => {
-                if(firstLine){                            
-                    firstLine=false;
+          
+            //呼叫API取得各科目平均成績
+            student.avgScoreByCourse().then(data => {  
+                if (data == -1){
+                    event.reply('找不到資料');
+                }else if(data == -9){                    
+                    event.reply('執行錯誤');
                 }else{
-                    msg = msg + '\n';
-                }
-                msg = msg + item.course + ':' + item.score;
-            });
-    
-            event.reply({type:'text', text: msg});
-            }  
-        })
+                    let msg='';
+                    let firstLine = true;
 
-        //呼叫API取得成績資料
-        student.fetchStudent(no2).then(data => {  
-            if (data == -1){
-            event.reply('找不到資料');
-            }else if(data == -9){                    
-            event.reply('執行錯誤');
-            }else{
-            event.reply([
-                {'type':'text', 'text':data.stuno},
-                {'type':'text', 'text':data.stuname},
-                {'type':'text', 'text':data.gender}]
-            );  
-            }  
-        }) 
+                    data.forEach(item => {  
+                        if(firstLine){                            
+                            firstLine=false;
+                        }else{
+                            msg = msg + '\n';
+                        }
+                        msg = msg + item.course + ':' + Math.round(item.avg*100)/100;                                                
+                    });
 
-
-             
-            
-            
+                    event.reply({type:'text', text: msg});
+                }  
+            })  
         }
     );
 });
-
-
-
-
 
 
 
