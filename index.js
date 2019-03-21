@@ -56,7 +56,35 @@ bot.on('message', function(event) {
 
                     event.reply({type:'text', text: msg});
                 }  
+            })
+            
+            student.avgScoreByCourse().then(data => {  
+                if (data == -1){
+                    event.reply('找不到資料');
+                }else if(data == -9){                    
+                    event.reply('執行錯誤');
+                }else{
+                    let msg='';
+                    let firstLine = true;
+
+                    data.forEach(item => {  
+                        if(firstLine){                            
+                            firstLine=false;
+                        }else{
+                            msg = msg + '\n';
+                        }
+                        msg = msg + item.course + ':' + Math.round(item.avg*100)/100;                                                
+                    });
+
+                    event.reply({type:'text', text: msg});
+                }  
             })  
+
+
+
+
+
+
         }
     );
 });
