@@ -33,6 +33,7 @@ bot.on('message', function(event) {
 	    
             //使用者傳來的學號
             const no = event.message.text;
+            
           
            //呼叫API取得性別統計人數
            student.countByGender().then(data => {
@@ -66,7 +67,7 @@ bot.on('message', function(event2) {
             const userId = profile.userId;
 	    
             //使用者傳來的學號
-            const no = event2.message.text;
+            const no2 = event2.message.text;
           
             //呼叫API取得各科目平均成績
             student.avgScoreByCourse().then(data => {  
