@@ -22,24 +22,39 @@ var bot = linebot({
 
 
 
-//========================================
+//--------------------------------
 // 機器人接受訊息的處理
-//========================================
+//--------------------------------
 bot.on('message', function(event) {    
     event.source.profile().then(
-        function (profile) {	
+        function (profile) {
             //取得使用者資料
-            var userName = profile.displayName;
-            var userId = profile.userId;
+            const userName = profile.displayName;
+            const userId = profile.userId;
 	    
-	    //使用者傳來的學號
-            var no = event.message.text;		
-		  
-            student.fetchOneStudent(no).then(d => {
-                if (d.data.length > 0){
-                    event.reply(d.data[0].course);  //回覆學生姓名
+            //使用者傳來的學號
+            const no = event.message.text;
+          
+            //呼叫API取得成績資料
+            student.fetchScores(no).then(data => {  
+                if (data == -1){
+                    event.reply('找不到資料');
+                }else if(data == -9){                    
+                    event.reply('執行錯誤');
                 }else{
-                    event.reply('找不到資料');        //回覆找不到
+                    let msg='';
+                    let firstLine = true;
+
+                    data.forEach(item => {
+                        if(firstLine){                            
+                            firstLine=false;
+                        }else{
+                            msg = msg + '\n';
+                        }
+                        msg = msg + item.course + ':' + item.score;
+                    });
+
+                    event.reply({type:'text', text: msg});
                 }  
             })  
         }
