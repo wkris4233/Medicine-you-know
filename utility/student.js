@@ -27,9 +27,6 @@ var fetchStudent = async function(stuNo){
     return result;  
 }
 
-
-
-
 //------------------------------------------
 // 由學號查詢學生成績
 //------------------------------------------
@@ -52,8 +49,7 @@ var fetchScores = async function(stuNo){
     //回傳執行結果
     return result;
 }
-
-
+//------------------------------------------
 
 //匯出
-module.exports = {fetchOneStudent};
+module.exports = {fetchStudent, fetchScores};
