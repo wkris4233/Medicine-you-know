@@ -67,7 +67,7 @@ bot.on('message', function(event) {
             const userId = profile.userId;
 	    
             //使用者傳來的學號
-            const no2 = event.message.text;
+            const no = event.message.text;
           
             //呼叫API取得各科目平均成績
             student.avgScoreByCourse().then(data => {  
