@@ -60,7 +60,7 @@ bot.on('message', function(event) {
 // 機器人接受訊息的處理
 //--------------------------------
 bot.on('message', function(event) {    
-    event2.source.profile().then(
+    event.source.profile().then(
         function (profile) {
             //取得使用者資料
             const userName = profile.displayName;
