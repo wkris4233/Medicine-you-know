@@ -55,7 +55,49 @@ bot.on('message', function(event) {
 
                     event.reply({type:'text', text: msg});
                 }  
+            })
+            
+             //呼叫API取得成績資料
+             student.fetchScores(no).then(data => {  
+                if (data == -1){
+                    event.reply('找不到資料');
+                }else if(data == -9){                    
+                    event.reply('執行錯誤');
+                }else{
+                    let msg='';
+                    let firstLine = true;
+
+                    data.forEach(item => {
+                        if(firstLine){                            
+                            firstLine=false;
+                        }else{
+                            msg = msg + '\n';
+                        }
+                        msg = msg + item.course + ':' + item.score;
+                    });
+
+                    event.reply({type:'text', text: msg});
+                }  
             })  
+
+            
+             //呼叫API取得學生資料
+             student.fetchStudent(no).then(data => {  
+                if (data == -1){
+                    event.reply('找不到資料');
+                }else if(data == -9){                    
+                    event.reply('執行錯誤');
+                }else{
+                    event.reply([
+                        {'type':'text', 'text':data.stuno},
+                        {'type':'text', 'text':data.stuname},
+                        {'type':'text', 'text':data.gender}]
+                    );  
+                }  
+            })
+
+
+
         }
     );
 });
