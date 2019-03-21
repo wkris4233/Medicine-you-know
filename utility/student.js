@@ -30,7 +30,7 @@ var fetchStudent = async function(stuNo){
 //------------------------------------------
 // 由學號查詢學生成績
 //------------------------------------------
-var fetchScores = async function(stuNo){
+var fetchScores = async function(stuNo2){
     //存放結果
     let result; 
 
