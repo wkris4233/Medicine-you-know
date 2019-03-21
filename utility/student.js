@@ -49,8 +49,7 @@ var fetchScores = async function(stuNo){
     //回傳執行結果
     return result;
 }
-
-
+//------------------------------------------
 
 //匯出
-module.exports = {fetchStudent, fetchScores, avgScoreByCourse};
+module.exports = {fetchStudent, fetchScores};
