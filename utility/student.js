@@ -4,28 +4,6 @@
 const query = require('./asyncDB.js');
 
 
-//------------------------------------------
-// 由學號查詢學生資料
-//------------------------------------------
-var fetchStudent = async function(stuNo){
-    //存放結果
-    let result;  
-
-    //讀取資料庫
-    await query('select * from student where stuno = $1', [stuNo])
-        .then((data) => {
-            if(data.rows.length > 0){
-                result = data.rows[0];  //學生資料(物件)
-            }else{
-                result = -1;  //找不到資料
-            }    
-        }, (error) => {
-            result = -9;  //執行錯誤
-        });
-
-    //回傳執行結果
-    return result;  
-}
 
 //------------------------------------------
 // 由學號查詢學生成績
@@ -54,4 +32,4 @@ var fetchScores = async function(stuNo){
 
 
 //匯出
-module.exports = {fetchStudent, fetchScores};
+module.exports = {fetchScores};
