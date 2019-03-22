@@ -19,12 +19,50 @@ var bot = linebot({
 
 
 
+//--------------------------------
+// 機器人接受訊息的處理
+//--------------------------------
+bot.on('message', function(event) {    
+    event.source.profile().then(
+        function (profile) {
+            //取得使用者資料
+            const userName = profile.displayName;
+            const userId = profile.userId;
+	    
+            //使用者傳來的學號
+            const no = event.message.text;
+          
+            //呼叫API取得成績資料
+            student.fetchScores(no).then(data => {  
+                if (data == -1){
+                    event.reply('找不到資料');
+                }else if(data == -9){                    
+                    event.reply('執行錯誤');
+                }else{
+                    let msg='';
+                    let firstLine = true;
+
+                    data.forEach(item => {
+                        if(firstLine){                            
+                            firstLine=false;
+                        }else{
+                            msg = msg + '\n';
+                        }
+                        msg = msg + item.course + ':' + item.score;
+                    });
+
+                    event.reply({type:'text', text: msg});
+                }  
+            })
+
+
+
 
 
 //--------------------------------
 // 機器人接受訊息的處理
 //--------------------------------
-bot.on('message', function(event) {    
+//bot.on('message', function(event) {    
     event.source.profile().then(
         function (profile) {
             //取得使用者資料
@@ -59,7 +97,7 @@ bot.on('message', function(event) {
 //--------------------------------
 // 機器人接受訊息的處理
 //--------------------------------
-bot.on('message', function(event) {    
+//bot.on('message', function(event) {    
     event.source.profile().then(
         function (profile) {
             //取得使用者資料
