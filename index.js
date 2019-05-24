@@ -22,7 +22,7 @@ var bot = linebot({
 //--------------------------------
 // 機器人接受訊息的處理
 //--------------------------------
-bot.on('message', function(event) {    
+/*bot.on('message', function(event) {    
     event.source.profile().then(
         function (profile) {
             //取得使用者資料
@@ -56,7 +56,7 @@ bot.on('message', function(event) {
             })  
         }
     );
-});
+});*/
 
 
 
