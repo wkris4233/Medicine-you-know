@@ -19,45 +19,70 @@ var bot = linebot({
 
 
 
-//--------------------------------
+//========================================
 // 機器人接受訊息的處理
-//--------------------------------
-/*bot.on('message', function(event) {    
+//========================================
+bot.on('message', function(event) {    
     event.source.profile().then(
         function (profile) {
-            //取得使用者資料
-            const userName = profile.displayName;
-            const userId = profile.userId;
-	    
+          
+      
             //使用者傳來的學號
             const no = event.message.text;
           
-            //呼叫API取得成績資料
-            student.fetchScores(no).then(data => {  
+            //呼叫API取得學生資料
+            student.fetchStudent(no).then(data => {  
                 if (data == -1){
                     event.reply('找不到資料');
                 }else if(data == -9){                    
                     event.reply('執行錯誤');
+                    console.log(no);
                 }else{
-                    let msg='';
-                    let firstLine = true;
-
-                    data.forEach(item => {
-                        if(firstLine){                            
-                            firstLine=false;
-                        }else{
-                            msg = msg + '\n';
-                        }
-                        msg = msg + item.course + ':' + item.score;
-                    });
-
-                    event.reply({type:'text', text: msg});
+                    event.reply([
+                        {'type':'text',
+                         'text':"中文品名:"+data.medNameCh+"\n"
+                         + data.indication},
+                        {'type':'text', 'text':data.medNameEn},
+                        {'type':'text', 'text':data.prinComp}]
+                    );  
                 }  
             })  
         }
     );
-});*/
-
+  });
+  //--
+  /*
+  bot.on('message', function(event) {
+      event.reply({
+          "type": "template",
+         
+          "template": {
+              "type": "buttons",
+              "thumbnailImageUrl": "https://newone-1.herokuapp.com/imgs/med01.jpg",
+              "imageAspectRatio": "rectangle",
+              "imageSize": "cover",
+              "imageBackgroundColor": "#FFFFFF",
+              "title": "來克炎腸溶錠50公絲",
+              "text": "DICLOREN E.C. TABLETS 50MG DICLOFENAC 'WEIDAR'",
+              
+              "actions": [
+                  {
+                    "type": "postback",
+                    "label": "就是他",
+                    "data": "action=buy&itemid=123"
+                  },
+                  
+                  {
+                    "type": "uri",
+                    "label": "詳細資料",
+                    "uri": "http://www.taiwan-pharma.org.tw/public/medicine_showdetail.php?sn=A028017100"
+                  }
+              ]
+          }
+        });
+  });
+  */
+  //========================================
 
 
 //----------------------------------------
@@ -80,6 +105,6 @@ app.use(express.static('public'));
 // 或是監聽Heroku設定的埠號
 //----------------------------------------
 var server = app.listen(process.env.PORT || 3000, function() {
-    var port = server.address().port;
+    const port = server.address().port;
     console.log("正在監聽埠號:", port);
 });
