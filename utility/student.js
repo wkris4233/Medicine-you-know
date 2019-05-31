@@ -11,7 +11,7 @@ var fetchStudent = async function(stuNo){
     let result;  
 
     //讀取資料庫
-    await query('SELECT * from allinfo ')
+    await query('SELECT * from allinfo where allinfo."medNameCh" like $1',["%"+stuNo +"%"])
         .then((data) => {
             if(data.rows.length > 0){
                 result = data.rows[0];  //學生資料(物件)
