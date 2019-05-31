@@ -41,15 +41,15 @@ bot.on('message', function(event) {
                     if (data.formulation=null){
                         data.formulation="";
                     }
-                    if (data.dosage=null){
-                        data.dosage="";
+                    if (data.package=null){
+                        data.package="";
                     }
                     event.reply([
                         
                         {'type':'text',
                          'text':"中文品名:"+data.medNameCh+"\n"
                          +"英文品名:"+ data.medNameEn+"\n"
-                         +"外觀:"+ data.formulation+data.package+"\n"
+                         +"外觀:"+ data.formulation+"  "+data.package+"\n"
                          + "適應症:"+ data.indication}]
                     );  
                 }  
