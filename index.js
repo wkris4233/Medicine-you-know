@@ -41,9 +41,9 @@ bot.on('message', function(event) {
                     event.reply([
                         {'type':'text',
                          'text':"中文品名:"+data.medNameCh+"\n"
-                         + data.indication},
-                        {'type':'text', 'text':data.medNameEn},
-                        {'type':'text', 'text':data.prinComp}]
+                         +"英文品名:"+ data.medNameEn+"\n"
+                         +"外觀:"+ data.formulation+data.dosage+"\n"
+                         + "適應症:"+ data.indication}]
                     );  
                 }  
             })  
