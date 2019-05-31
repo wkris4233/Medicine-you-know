@@ -38,12 +38,12 @@ bot.on('message', function(event) {
                     event.reply('執行錯誤');
                     console.log(no);
                 }else{
-                    if (data.formulation=null){
+                    /*if (data.formulation="null"){
                         data.formulation="";
                     }
-                    if (data.package=null){
+                    if (data.package="null"){
                         data.package="";
-                    }
+                    }*/
                     event.reply([
                         
                         {'type':'text',
