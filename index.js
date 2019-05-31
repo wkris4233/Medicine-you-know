@@ -38,11 +38,18 @@ bot.on('message', function(event) {
                     event.reply('執行錯誤');
                     console.log(no);
                 }else{
+                    if (data.formulation=null){
+                        data.formulation="";
+                    }
+                    if (data.dosage=null){
+                        data.dosage="";
+                    }
                     event.reply([
+                        
                         {'type':'text',
                          'text':"中文品名:"+data.medNameCh+"\n"
                          +"英文品名:"+ data.medNameEn+"\n"
-                         +"外觀:"+ data.formulation+data.dosage+"\n"
+                         +"外觀:"+ data.formulation+data.package+"\n"
                          + "適應症:"+ data.indication}]
                     );  
                 }  
