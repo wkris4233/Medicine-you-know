@@ -83,16 +83,8 @@ bot.on('message', function(event) {
 
   if(event.message.type = 'location'){
 
-    event.reply([
-      {
-        "type": "location",
-        "title": "位置",
-        "address": "佳",
-        "latitude": 35.65910807942215,
-        "longitude": 139.70372892916203
-      }
-    ]);    
-
+    handleLocation();
+    
   }
 
   
@@ -135,7 +127,7 @@ bot.on('message', function(event) {
 
 
 //========================================
-//提醒用藥
+//查詢位置
 //========================================
   function loc(){
 
@@ -148,7 +140,7 @@ bot.on('message', function(event) {
         "actions": [
           {
             "type":"location",
-            "label":"Location"            
+            "label":"開啟位置資訊"            
           }
         ]
       }
@@ -157,7 +149,20 @@ bot.on('message', function(event) {
 
   };
 
-  
+  function handleLocation(message, replyToken) {
+    return client.replyMessage(
+      replyToken,
+      {
+        type: 'location',
+        title: message.title,
+        address: message.address,
+        latitude: message.latitude,
+        longitude: message.longitude,
+      }
+    );
+  }
+
+
   //========================================
   //提醒用藥
   //========================================
