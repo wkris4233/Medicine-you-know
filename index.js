@@ -38,6 +38,7 @@ bot.on('postback', function(event) {
             }
         ]);   
     });
+
 });
 //========================================
 
@@ -60,10 +61,41 @@ bot.on('message', function(event) {
       add_time();
     }
 
+
     //查看紀錄
 
-  }  
 
+
+
+
+    //位置
+    if(msg=="查詢附近院所"){
+
+      loc();
+
+    } 
+
+
+
+  } 
+  
+  
+
+  if(event.message.type = 'location'){
+
+    event.reply([
+      {
+        "type": "location",
+        "title": "位置",
+        "address": "佳",
+        "latitude": 35.65910807942215,
+        "longitude": 139.70372892916203
+      }
+    ]);    
+
+  }
+
+  
 
     event.source.profile().then(
         function (profile) {
@@ -98,7 +130,34 @@ bot.on('message', function(event) {
             })  
         }
     );
+  
+    
 
+
+//========================================
+//提醒用藥
+//========================================
+  function loc(){
+
+    event.reply({      
+      "type": "template",
+      "altText": "this is a buttons template",
+      "template": {
+        "type": "buttons",
+        "text": "查詢附近院所",
+        "actions": [
+          {
+            "type":"location",
+            "label":"Location"            
+          }
+        ]
+      }
+    });
+
+
+  };
+
+  
   //========================================
   //提醒用藥
   //========================================
