@@ -81,11 +81,7 @@ bot.on('message', function(event) {
   
   
 
-  if(event.message.type = 'location'){
-
-    handleLocation();
-    
-  }
+  
 
   
 
@@ -149,6 +145,7 @@ bot.on('message', function(event) {
 
   };
 
+  /*
   function handleLocation(message, replyToken) {
     return client.replyMessage(
       replyToken,
@@ -161,7 +158,7 @@ bot.on('message', function(event) {
       }
     );
   }
-
+  */
 
   //========================================
   //提醒用藥
