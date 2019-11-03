@@ -249,10 +249,13 @@ bot.on('message', function(event) {
           "text": "要在幾點提醒呢？",
           "actions": [
               {
-                "type": "datetimepicker",
-                "label": "選擇時間",
-                "data": "t2",
-                "mode": "time",
+                
+                "type":"location",
+                "label":"Location"
+                
+                
+                
+                
               }
           ]
       }
