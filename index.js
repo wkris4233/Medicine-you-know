@@ -248,14 +248,11 @@ bot.on('message', function(event) {
           "type": "buttons",
           "text": "要在幾點提醒呢？",
           "actions": [
-              {
-                
-                "type":"location",
-                "label":"Location"
-                
-                
-                
-                
+              {               
+                "type": "datetimepicker",
+                "label": "選擇時間",
+                "data": "t2",
+                "mode": "time",                
               }
           ]
       }
