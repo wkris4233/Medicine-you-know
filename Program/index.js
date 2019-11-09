@@ -19,8 +19,8 @@ var bot = linebot({
 
 
 //提醒用藥新增變數
-var rem=0;
-var med, week, time;
+var med, week, time, userId;
+var timer1;
 
 //========================================
 // 機器人接受回覆的處理
@@ -30,15 +30,15 @@ bot.on('postback', function(event) {
 
     event.source.profile().then(function (profile) {
     
-
+        userId = profile.userId;
         event.reply([
             {
                 "type": "text",
                 "text": "好的！那我會在" + week + time + "時提醒你吃" + med + "的藥"
             }
-        ]);   
+        ]); 
+        showTime();   
     });
-
 });
 //========================================
 
@@ -97,7 +97,7 @@ bot.on('message', function(event) {
                 if (data == -1){
                     event.reply('找不到資料');
                 }else if(data == -9){                    
-                    event.reply('執行錯誤');
+                    event.reply('無法辨認你說的意思');
                     console.log(no);
                 }else{
                     /*if (data.formulation="null"){
@@ -309,11 +309,11 @@ bot.on('message', function(event) {
           "type": "buttons",
           "text": "要在幾點提醒呢？",
           "actions": [
-              {               
+              {
                 "type": "datetimepicker",
                 "label": "選擇時間",
                 "data": "t2",
-                "mode": "time",                
+                "mode": "time",
               }
           ]
       }
@@ -355,6 +355,29 @@ bot.on('message', function(event) {
   });
   */
   //========================================
+
+//========================================
+
+// 主動發送訊息
+function showTime(){
+    clearTimeout(timer1);
+
+    //var userId = 'Uc06508e2f98922cacce2c8e489a24f84';
+    var today = new Date();
+    var h = (today.getHours()<10 ? '0'+(today.getHours()) : today.getHours()); //h=h+8;
+    var m = (today.getMinutes()<10 ? '0'+(today.getMinutes()) : today.getMinutes());
+    var nowTime = h + ":" + m;
+
+    if(nowTime == time){
+      bot.push(userId, [nowTime+"&"+time]);
+    /*console.log('userId: ' + userId);
+    console.log('send: ' + nowTime);*/
+      return;      
+    }
+
+    timer1 = setInterval(showTime, 10000);
+
+};
 
 
 //----------------------------------------
