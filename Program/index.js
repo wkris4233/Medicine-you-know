@@ -38,6 +38,7 @@ bot.on('postback', function(event) {
             }
         ]);   
     });
+
 });
 //========================================
 
@@ -60,10 +61,29 @@ bot.on('message', function(event) {
       add_time();
     }
 
+
     //查看紀錄
 
-  }  
 
+
+
+
+    //位置
+    if(msg=="查詢附近院所"){
+
+      loc();
+
+    } 
+
+
+
+  } 
+  
+  
+
+  
+
+  
 
     event.source.profile().then(
         function (profile) {
@@ -98,6 +118,47 @@ bot.on('message', function(event) {
             })  
         }
     );
+  
+    
+
+
+//========================================
+//查詢位置
+//========================================
+  function loc(){
+
+    event.reply({      
+      "type": "template",
+      "altText": "this is a buttons template",
+      "template": {
+        "type": "buttons",
+        "text": "查詢附近院所",
+        "actions": [
+          {
+            "type":"location",
+            "label":"開啟位置資訊"            
+          }
+        ]
+      }
+    });
+
+
+  };
+
+  /*
+  function handleLocation(message, replyToken) {
+    return client.replyMessage(
+      replyToken,
+      {
+        type: 'location',
+        title: message.title,
+        address: message.address,
+        latitude: message.latitude,
+        longitude: message.longitude,
+      }
+    );
+  }
+  */
 
   //========================================
   //提醒用藥
@@ -248,11 +309,11 @@ bot.on('message', function(event) {
           "type": "buttons",
           "text": "要在幾點提醒呢？",
           "actions": [
-              {
+              {               
                 "type": "datetimepicker",
                 "label": "選擇時間",
                 "data": "t2",
-                "mode": "time",
+                "mode": "time",                
               }
           ]
       }
