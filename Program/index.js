@@ -68,8 +68,11 @@ bot.on('message', function(event) {
     var msg = event.message.text;
     if(msg=="提醒用藥") remind();
     //新增提醒
+    if(msg=="新增提醒"){
+      rem = 1;
+      add_med();
+    }
     if(rem==1){
-      if(msg=="新增提醒") add_med();
       if(msg=="感冒" || msg=="糖尿病" || msg=="高血壓" || msg=="其他的藥物") {
         med = event.message.text;
         add_week();
@@ -98,6 +101,8 @@ bot.on('message', function(event) {
     }
 
     //查看紀錄
+    if(msg=="查看紀錄") read_med();
+
 
   }  
 
@@ -140,7 +145,6 @@ bot.on('message', function(event) {
   //提醒用藥
   //========================================
   function remind(){
-    rem=1;
     event.reply({
       "type": "template",
       "altText": "新增或查看",
@@ -201,82 +205,232 @@ bot.on('message', function(event) {
         "text": "需要哪些天提醒呢？"
       },
       {
-        "type": "template",
-        "altText": "this is a image carousel template",
-        "template": {
-            "type": "image_carousel",
-            "columns": [
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "每天",
-                  "text": "每天"
-                }
+        "type": "flex",
+        "altText": "Flex Message",
+        "contents": {
+          "type": "carousel",
+          "contents": [
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039015277_7fdfb7b759_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
               },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期一",
-                  "text": "星期一"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期二",
-                  "text": "星期二"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期三",
-                  "text": "星期三"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期四",
-                  "text": "星期四"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期五",
-                  "text": "星期五"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期六",
-                  "text": "星期六"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期日",
-                  "text": "星期日"
-                }
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "每天提醒",
+                      "text": "每天"
+                    }
+                  }
+                ]
               }
-            ]
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039015187_a7e84411d7_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期一提醒",
+                      "text": "星期一"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039014722_6d578aa816_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期二提醒",
+                      "text": "星期二"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039015067_5c82441185_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期三提醒",
+                      "text": "星期三"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49038297423_eba1f4da88_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期四提醒",
+                      "text": "星期四"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49038297323_56c84a5fe6_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期五提醒",
+                      "text": "星期五"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039014812_aca1c307fb_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期六提醒",
+                      "text": "星期六"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49038297028_330268468a_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期日提醒",
+                      "text": "星期日"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         }
       }
     ]);
   };
-
-
   function add_time(){
     event.reply({
       "type": "template",
@@ -295,7 +449,6 @@ bot.on('message', function(event) {
       }
     });
   };
-
   function add_yes(){
     rem = 0;
     event.reply({
@@ -304,7 +457,6 @@ bot.on('message', function(event) {
     });
     showTime(); 
   };
-
   function add_no(){
     rem = 2;
     event.reply({
@@ -332,8 +484,7 @@ bot.on('message', function(event) {
           ]
       }
     });
-  };
-  
+  }; 
   function add_check(){
     event.reply({
       "type": "template",
@@ -357,6 +508,84 @@ bot.on('message', function(event) {
     });
   };
 
+  //========================================
+  //查看提醒
+  //========================================
+  function read_med(){
+    event.reply({
+      "type": "flex",
+      "altText": "Flex Message",
+      "contents": {
+        "type": "bubble",
+        "direction": "ltr",
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "sm",
+          "contents": [
+            {
+              "type": "text",
+              "text": "藥物種類",
+              "size": "xl",
+              "align": "start",
+              "weight": "bold"
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "box",
+              "layout": "horizontal",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "間隔時間:"
+                },
+                {
+                  "type": "text",
+                  "text": "週/每天",
+                  "size": "lg",
+                  "weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "layout": "horizontal",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "提醒時間:"
+                },
+                {
+                  "type": "text",
+                  "text": "XX:XX",
+                  "size": "lg",
+                  "weight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        "footer": {
+          "type": "box",
+          "layout": "horizontal",
+          "flex": 1,
+          "contents": [
+            {
+              "type": "button",
+              "action": {
+                "type": "message",
+                "label": "刪除此提醒",
+                "text": "刪除提醒"
+              },
+              "style": "secondary"
+            }
+          ]
+        }
+      }
+    });
+  };
 
 });
   //--
