@@ -7,6 +7,9 @@ var express = require('express');
 //增加引用函式
 const student = require('./utility/student.js');
 
+// set timezone 抓取台灣時間
+process.env.TZ = 'Asia/Taipei';
+
 
 //----------------------------------------
 // 填入自己在Line Developers的channel值
@@ -19,6 +22,7 @@ var bot = linebot({
 
 
 //提醒用藥新增變數
+var rem = 0;
 var med, week, time, userId;
 var timer1;
 
@@ -31,13 +35,26 @@ bot.on('postback', function(event) {
     event.source.profile().then(function (profile) {
     
         userId = profile.userId;
-        event.reply([
-            {
-                "type": "text",
-                "text": "好的！那我會在" + week + time + "時提醒你吃" + med + "的藥"
-            }
-        ]); 
-        showTime();   
+        event.reply({
+          "type": "template",
+          "altText": "確認提醒內容",
+          "template": {
+              "type": "confirm",
+              "text": "你是要在" + week + "的" + time + "吃" + med + "的藥, 對嗎？",
+              "actions": [
+                  {
+                    "type": "message",
+                    "label": "是的",
+                    "text": "是的，沒錯"
+                  },
+                  {
+                    "type": "message",
+                    "label": "不對",
+                    "text": "不對，有錯誤"
+                  }
+              ]
+          }
+        });   
     });
 });
 //========================================
@@ -51,14 +68,33 @@ bot.on('message', function(event) {
     var msg = event.message.text;
     if(msg=="提醒用藥") remind();
     //新增提醒
-    if(msg=="新增提醒") add_med();
-    if(msg=="感冒" || msg=="糖尿病" || msg=="高血壓") {
-      med = event.message.text;
-      add_week();
+    if(rem==1){
+      if(msg=="新增提醒") add_med();
+      if(msg=="感冒" || msg=="糖尿病" || msg=="高血壓" || msg=="其他的藥物") {
+        med = event.message.text;
+        add_week();
+      }
+      if(msg.indexOf('星期') != -1 || msg=="每天"){
+        week = event.message.text;
+        add_time();
+      }
+      if(msg.indexOf('是') != -1) add_yes();
+      if(msg.indexOf('不對') != -1) add_no();
     }
-    if(msg.indexOf('星期') != -1 || msg=="每天"){
-      week = event.message.text;
-      add_time();
+    if(rem==2){
+      if(msg=="藥物種類") add_med();
+      if(msg=="提醒日期") add_week();
+      if(msg=="提醒時間") add_time();
+      if(msg=="感冒" || msg=="糖尿病" || msg=="高血壓" || msg=="其他的藥物") {
+        med = event.message.text;
+        add_check();
+      }
+      if(msg.indexOf('星期') != -1 || msg=="每天"){
+        week = event.message.text;
+        add_check();
+      }
+      if(msg.indexOf('是') != -1) add_yes();
+      if(msg.indexOf('不對') != -1) add_no();
     }
 
     //查看紀錄
@@ -104,10 +140,10 @@ bot.on('message', function(event) {
   //提醒用藥
   //========================================
   function remind(){
-    //rem=1;
+    rem=1;
     event.reply({
       "type": "template",
-      "altText": "提醒用藥分類",
+      "altText": "新增或查看",
       "template": {
           "type": "confirm",
           "text": "你要新增提醒吃藥的時間呢？還是要查看之前的提醒紀錄？",
@@ -260,6 +296,67 @@ bot.on('message', function(event) {
     });
   };
 
+  function add_yes(){
+    rem = 0;
+    event.reply({
+      "type": "text",
+      "text": "好的！那我會在" + week + time + "時提醒你吃" + med + "的藥!"
+    });
+    showTime(); 
+  };
+
+  function add_no(){
+    rem = 2;
+    event.reply({
+      "type": "template",
+      "altText": "更改提醒錯誤",
+      "template": {
+          "type": "buttons",
+          "text": "我記錯了什麼內容呢？",
+          "actions": [
+              {
+                "type": "message",
+                "label": "藥物種類",
+                "text": "藥物種類"
+              },
+              {
+                "type": "message",
+                "label": "提醒日期",
+                "text": "提醒日期"
+              },
+              {
+                "type": "message",
+                "label": "提醒時間",
+                "text": "提醒時間"
+              }
+          ]
+      }
+    });
+  };
+  
+  function add_check(){
+    event.reply({
+      "type": "template",
+      "altText": "確認提醒內容",
+      "template": {
+          "type": "confirm",
+          "text": "你是要在" + week + "的" + time + "吃" + med + "的藥, 對嗎？",
+          "actions": [
+              {
+                "type": "message",
+                "label": "是的",
+                "text": "是的，沒錯"
+              },
+              {
+                "type": "message",
+                "label": "不對",
+                "text": "不對，有錯誤"
+              }
+          ]
+      }
+    });
+  };
+
 
 });
   //--
@@ -309,7 +406,7 @@ function showTime(){
     var nowTime = h + ":" + m;
 
     if(nowTime == time){
-      bot.push(userId, [nowTime+"&"+time]);
+      bot.push(userId, ["已經"+time+"了，記得要吃"+med+"的藥喔！"]);
     /*console.log('userId: ' + userId);
     console.log('send: ' + nowTime);*/
       return;      
