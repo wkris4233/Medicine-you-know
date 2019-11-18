@@ -21,6 +21,9 @@ var bot = linebot({
 //提醒用藥新增變數
 var rem=0;
 var med, week, time;
+//查詢附近院所新增變數
+var locNum=0;
+var locText;
 
 //========================================
 // 機器人接受回覆的處理
@@ -70,10 +73,20 @@ bot.on('message', function(event) {
 
     //位置
     if(msg=="查詢附近院所"){
-
+      locText = event.message.text;
+      locNum = 1;
       loc();
 
-    } 
+    }
+    if(locNum==1){
+      
+      if(event.message.type = 'location'){
+
+        showLoc();
+
+      }
+
+    }
 
 
 
@@ -129,7 +142,7 @@ bot.on('message', function(event) {
 
     event.reply({      
       "type": "template",
-      "altText": "this is a buttons template",
+      "altText": "查詢附近院所",
       "template": {
         "type": "buttons",
         "text": "查詢附近院所",
@@ -141,6 +154,22 @@ bot.on('message', function(event) {
         ]
       }
     });
+
+
+  };
+
+
+  function showLoc(){
+
+    event.reply([
+      {
+        "type": "text",
+        "text": "1"+ locText
+      }
+
+    ]);
+
+
 
 
   };
