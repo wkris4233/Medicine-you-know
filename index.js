@@ -80,7 +80,7 @@ bot.on('message', function(event) {
     }
     if(locNum==1){
       
-      if(event.message.type == 'location'){
+      if(event.message.type == "location"){
 
         showLoc();
 
