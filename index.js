@@ -78,7 +78,7 @@ bot.on('message', function(event) {
       loc();
 
     }
-    if(locNum==1){
+    if(locNum==1 & event.message.type == "location"){
       
       if(event.message.type == "location"){
 
@@ -163,8 +163,50 @@ bot.on('message', function(event) {
 
     event.reply([
       {
-        "type": "text",
-        "text": "1"+ locText
+        "type": "template",
+        "altText": "this is a carousel template",
+        "template": {
+          "type": "carousel",
+          "actions": [],
+          "columns": [
+            {
+              "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+              "title": "一誠藥局",
+              "text": "1",
+              "actions": [
+                {
+                  "type": "message",
+                  "label": "顯示地圖",
+                  "text": "動作 1"
+                }
+              ]
+            },
+            {
+              "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+              "title": "廣泰藥局",
+              "text": "1",
+              "actions": [
+                {
+                  "type": "message",
+                  "label": "顯示地圖",
+                  "text": "動作 1"
+                }
+              ]
+            },
+            {
+              "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+              "title": "長青連鎖藥局 皇慶藥局",
+              "text": "文字",
+              "actions": [
+                {
+                  "type": "message",
+                  "label": "顯示地圖",
+                  "text": "動作 1"
+                }
+              ]
+            }
+          ]
+        }
       }
 
     ]);
