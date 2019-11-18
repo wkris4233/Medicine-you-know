@@ -87,6 +87,7 @@ bot.on('message', function(event) {
   switch(locNum){
     case 0:
       loc();
+      locNum=1;
     case 1:
       showLoc();
     break;
