@@ -165,7 +165,7 @@ bot.on('message', function(event) {
           "type": "carousel",
           "columns": [
             {
-              "thumbnailImageUrl": "https://goo.gl/maps/mbNWqQuUfMRaHQ2z6",
+              
               "title": "一誠藥局",
               "text": "新北市板橋區府中路62號",
               "actions": [
@@ -178,7 +178,7 @@ bot.on('message', function(event) {
               ]
             },
             {
-              "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+              
               "title": "廣泰藥局",
               "text": "新北市板橋區館前西路150號",
               "actions": [
@@ -190,7 +190,7 @@ bot.on('message', function(event) {
               ]
             },
             {
-              "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+              
               "title": "長青連鎖藥局 皇慶藥局",
               "text": "新北市板橋區南門街81號",
               "actions": [
