@@ -78,7 +78,7 @@ bot.on('message', function(event) {
       loc();
 
     }
-    if(locNum==1 & event.message.type == "location"){
+    if(locNum==1 & event.message.type == "text"){
       
         showLoc();
 
