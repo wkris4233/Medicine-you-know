@@ -164,18 +164,15 @@ bot.on('message', function(event) {
                   {
                     "thumbnailImageUrl": "https://example.com/bot/images/item1.jpg",
                     "imageBackgroundColor": "#FFFFFF",
-                    "title": "this is menu",
-                    "text": "description",
-                    "defaultAction": {
-                        "type": "uri",
-                        "label": "View detail",
-                        "uri": "http://example.com/page/123"
-                    },
+                    "title": "一誠藥局",
+                    "text": "新北市板橋區府中路62號",
                     "actions": [
                         {
-                            "type": "postback",
-                            "label": "Buy",
-                            "data": "action=buy&itemid=111"
+                          "type": 'location',
+                          "title": 'my location',
+                          "address": '新北市板橋區府中路62號',
+                          "latitude": "",
+                          "longitude":""
                         },
                         {
                             "type": "postback",
