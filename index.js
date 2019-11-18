@@ -75,8 +75,8 @@ bot.on('message', function(event) {
     if(msg=="查詢附近院所"){
 
       loc();
-      showLoc();
       
+
     }
     
 
@@ -84,12 +84,19 @@ bot.on('message', function(event) {
 
   } 
   
+  switch(locNum){
+    case 1:
+        showLoc();
+    break;
+  }
+
+
   
-  if(locNum==1 || event.message.type == 'location'){
-      
+  /*if(locNum==1 || event.message.type == 'location'){
+    showLoc();
         
 
-  }
+  }*/
   
 
   
