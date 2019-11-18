@@ -74,22 +74,26 @@ bot.on('message', function(event) {
     //位置
     if(msg=="查詢附近院所"){
       
+
+      
+
+
       locNum = 1;
       loc();
-      showLoc();
-    }
-    //if(locNum==1 || event.message.type == 'location'){
       
-        
-
-    //}
+    }
+    
 
 
 
   } 
   
   
+  if(locNum==1 || event.message.type == 'location'){
+      
+      showLoc();  
 
+  }
   
 
   
@@ -168,36 +172,43 @@ bot.on('message', function(event) {
             {
               "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
               "title": "一誠藥局",
-              "text": "1",
+              "text": "新北市板橋區府中路62號",
               "actions": [
                 {
-                  "type": "message",
-                  "label": "顯示地圖",
-                  "text": "動作 1"
+                  "type": 'location',
+                  "title": 'my location',
+                  "address": '新北市板橋區府中路62號',
+                  "latitude": "",
+                  "longitude":""
+                  
                 }
               ]
             },
             {
               "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
               "title": "廣泰藥局",
-              "text": "1",
+              "text": "新北市板橋區館前西路150號",
               "actions": [
                 {
-                  "type": "message",
-                  "label": "顯示地圖",
-                  "text": "動作 1"
+                  "type": 'location',
+                  "title": 'my location',
+                  "address": '新北市板橋區館前西路150號',
+                  "latitude": "",
+                  "longitude":"" 
                 }
               ]
             },
             {
               "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
               "title": "長青連鎖藥局 皇慶藥局",
-              "text": "文字",
+              "text": "新北市板橋區南門街81號",
               "actions": [
                 {
-                  "type": "message",
-                  "label": "顯示地圖",
-                  "text": "動作 1"
+                  "type": 'location',
+                  "title": 'my location',
+                  "address": '新北市板橋區南門街81號',
+                  "latitude": "",
+                  "longitude":""
                 }
               ]
             }
