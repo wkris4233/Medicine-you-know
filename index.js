@@ -74,7 +74,6 @@ bot.on('message', function(event) {
     //位置
     if(msg=="查詢附近院所"){
 
-      locNum = 1;
       loc();
       
     }
@@ -135,7 +134,7 @@ bot.on('message', function(event) {
 //查詢位置
 //========================================
   function loc(){
-
+    locNum = 1;
     event.reply({      
       "type": "template",
       "altText": "查詢附近院所",
