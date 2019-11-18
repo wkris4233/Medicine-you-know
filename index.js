@@ -7,6 +7,9 @@ var express = require('express');
 //增加引用函式
 const student = require('./utility/student.js');
 
+// set timezone 抓取台灣時間
+process.env.TZ = 'Asia/Taipei';
+
 
 //----------------------------------------
 // 填入自己在Line Developers的channel值
@@ -19,11 +22,9 @@ var bot = linebot({
 
 
 //提醒用藥新增變數
-var rem=0;
-var med, week, time;
-//查詢附近院所新增變數
-var locNum=0;
-var locText;
+var rem = 0;
+var med, week, time, userId;
+var timer1;
 
 //========================================
 // 機器人接受回覆的處理
@@ -33,15 +34,28 @@ bot.on('postback', function(event) {
 
     event.source.profile().then(function (profile) {
     
-
-        event.reply([
-            {
-                "type": "text",
-                "text": "好的！那我會在" + week + time + "時提醒你吃" + med + "的藥"
-            }
-        ]);   
+        userId = profile.userId;
+        event.reply({
+          "type": "template",
+          "altText": "確認提醒內容",
+          "template": {
+              "type": "confirm",
+              "text": "你是要在" + week + "的" + time + "吃" + med + "的藥, 對嗎？",
+              "actions": [
+                  {
+                    "type": "message",
+                    "label": "是的",
+                    "text": "是的，沒錯"
+                  },
+                  {
+                    "type": "message",
+                    "label": "不對",
+                    "text": "不對，有錯誤"
+                  }
+              ]
+          }
+        });   
     });
-
 });
 //========================================
 
@@ -54,49 +68,53 @@ bot.on('message', function(event) {
     var msg = event.message.text;
     if(msg=="提醒用藥") remind();
     //新增提醒
-    if(msg=="新增提醒") add_med();
-    if(msg=="感冒" || msg=="糖尿病" || msg=="高血壓") {
-      med = event.message.text;
-      add_week();
+    if(msg=="新增提醒"){
+      rem = 1;
+      add_med();
     }
-    if(msg.indexOf('星期') != -1 || msg=="每天"){
-      week = event.message.text;
-      add_time();
+    if(rem==1){
+      if(msg=="感冒" || msg=="糖尿病" || msg=="高血壓" || msg=="其他的藥物") {
+        med = event.message.text;
+        add_week();
+      }
+      if(msg.indexOf('星期') != -1 || msg=="每天"){
+        week = event.message.text;
+        add_time();
+      }
+      if(msg.indexOf('是') != -1) add_yes();
+      if(msg.indexOf('不對') != -1) add_no();
     }
-
+    if(rem==2){
+      if(msg=="藥物種類") add_med();
+      if(msg=="提醒日期") add_week();
+      if(msg=="提醒時間") add_time();
+      if(msg=="感冒" || msg=="糖尿病" || msg=="高血壓" || msg=="其他的藥物") {
+        med = event.message.text;
+        add_check();
+      }
+      if(msg.indexOf('星期') != -1 || msg=="每天"){
+        week = event.message.text;
+        add_check();
+      }
+      if(msg.indexOf('是') != -1) add_yes();
+      if(msg.indexOf('不對') != -1) add_no();
+    }
 
     //查看紀錄
+    if(msg=="查看紀錄") read_med();
 
-
-
-
-
-    //位置
     if(msg=="查詢附近院所"){
       
 
       showLoc();
 
 
-      //locNum = 1;
-      //loc();
+      
       
     }
-    
 
+  }  
 
-
-  } 
-  
-  
-  if(locNum==1 /*|| event.message.type = 'location'*/){
-      
-      showLoc();  
-
-  }
-  
-
-  
 
     event.source.profile().then(
         function (profile) {
@@ -110,7 +128,7 @@ bot.on('message', function(event) {
                 if (data == -1){
                     event.reply('找不到資料');
                 }else if(data == -9){                    
-                    event.reply('執行錯誤');
+                    event.reply('無法辨認你說的意思');
                     console.log(no);
                 }else{
                     /*if (data.formulation="null"){
@@ -131,121 +149,80 @@ bot.on('message', function(event) {
             })  
         }
     );
+
   
-    
-
-
-//========================================
-//查詢位置
-//========================================
-  function loc(){
-
-    event.reply({      
-      "type": "template",
-      "altText": "查詢附近院所",
-      "template": {
-        "type": "buttons",
-        "text": "查詢附近院所",
-        "actions": [
-          {
-            "type":"location",
-            "label":"開啟位置資訊"            
+  
+    function showLoc(){
+      locNum=0;
+      event.reply(
+        {
+          "type": "template",
+          "altText": "this is a carousel template",
+          "template": {
+            "type": "carousel",
+            "columns": [
+              {
+                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                "title": "一誠藥局",
+                "text": "新北市板橋區府中路62號",
+                "actions": [
+                  {
+                    "type": 'location',
+                    "title": 'my location',
+                    "address": '新北市板橋區府中路62號',
+                    "latitude": "",
+                    "longitude":""
+                    
+                  }
+                ]
+              },
+              {
+                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                "title": "廣泰藥局",
+                "text": "新北市板橋區館前西路150號",
+                "actions": [
+                  {
+                    "type": 'location',
+                    "title": 'my location',
+                    "address": '新北市板橋區館前西路150號',
+                    "latitude": "",
+                    "longitude":"" 
+                  }
+                ]
+              },
+              {
+                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                "title": "長青連鎖藥局 皇慶藥局",
+                "text": "新北市板橋區南門街81號",
+                "actions": [
+                  {
+                    "type": 'location',
+                    "title": 'my location',
+                    "address": '新北市板橋區南門街81號',
+                    "latitude": "",
+                    "longitude":""
+                  }
+                ]
+              }
+            ]
           }
-        ]
-      }
-    });
-
-
-  };
-
-
-  function showLoc(){
-    locNum=0;
-    event.reply(
-      {
-        "type": "template",
-        "altText": "this is a carousel template",
-        "template": {
-          "type": "carousel",
-          "actions": [],
-          "columns": [
-            {
-              "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-              "title": "一誠藥局",
-              "text": "新北市板橋區府中路62號",
-              "actions": [
-                {
-                  "type": 'location',
-                  "title": 'my location',
-                  "address": '新北市板橋區府中路62號',
-                  "latitude": "",
-                  "longitude":""
-                  
-                }
-              ]
-            },
-            {
-              "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-              "title": "廣泰藥局",
-              "text": "新北市板橋區館前西路150號",
-              "actions": [
-                {
-                  "type": 'location',
-                  "title": 'my location',
-                  "address": '新北市板橋區館前西路150號',
-                  "latitude": "",
-                  "longitude":"" 
-                }
-              ]
-            },
-            {
-              "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-              "title": "長青連鎖藥局 皇慶藥局",
-              "text": "新北市板橋區南門街81號",
-              "actions": [
-                {
-                  "type": 'location',
-                  "title": 'my location',
-                  "address": '新北市板橋區南門街81號',
-                  "latitude": "",
-                  "longitude":""
-                }
-              ]
-            }
-          ]
         }
-      }
-
-    );
-
-
-
-
-  };
-
-  /*
-  function handleLocation(message, replyToken) {
-    return client.replyMessage(
-      replyToken,
-      {
-        type: 'location',
-        title: message.title,
-        address: message.address,
-        latitude: message.latitude,
-        longitude: message.longitude,
-      }
-    );
-  }
-  */
-
+  
+      );
+    };
+  
+  
+  
+  
+  
+  
   //========================================
   //提醒用藥
   //========================================
   function remind(){
-    //rem=1;
     event.reply({
       "type": "template",
-      "altText": "提醒用藥分類",
+      "altText": "新增或查看",
       "template": {
           "type": "confirm",
           "text": "你要新增提醒吃藥的時間呢？還是要查看之前的提醒紀錄？",
@@ -303,82 +280,232 @@ bot.on('message', function(event) {
         "text": "需要哪些天提醒呢？"
       },
       {
-        "type": "template",
-        "altText": "this is a image carousel template",
-        "template": {
-            "type": "image_carousel",
-            "columns": [
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "每天",
-                  "text": "每天"
-                }
+        "type": "flex",
+        "altText": "Flex Message",
+        "contents": {
+          "type": "carousel",
+          "contents": [
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039015277_7fdfb7b759_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
               },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期一",
-                  "text": "星期一"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期二",
-                  "text": "星期二"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期三",
-                  "text": "星期三"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期四",
-                  "text": "星期四"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期五",
-                  "text": "星期五"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期六",
-                  "text": "星期六"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期日",
-                  "text": "星期日"
-                }
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "每天提醒",
+                      "text": "每天"
+                    }
+                  }
+                ]
               }
-            ]
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039015187_a7e84411d7_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期一提醒",
+                      "text": "星期一"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039014722_6d578aa816_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期二提醒",
+                      "text": "星期二"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039015067_5c82441185_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期三提醒",
+                      "text": "星期三"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49038297423_eba1f4da88_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期四提醒",
+                      "text": "星期四"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49038297323_56c84a5fe6_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期五提醒",
+                      "text": "星期五"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49039014812_aca1c307fb_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期六提醒",
+                      "text": "星期六"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "bubble",
+              "hero": {
+                "type": "image",
+                "url": "https://live.staticflickr.com/65535/49038297028_330268468a_m.jpg",
+                "size": "full",
+                "aspectRatio": "2:1",
+                "aspectMode": "cover",
+                "backgroundColor": "#FFFFFF"
+              },
+              "body": {
+                "type": "box",
+                "layout": "vertical",
+                "flex": 0,
+                "spacing": "none",
+                "contents": [
+                  {
+                    "type": "button",
+                    "action": {
+                      "type": "message",
+                      "label": "星期日提醒",
+                      "text": "星期日"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
         }
       }
     ]);
   };
-
-
   function add_time(){
     event.reply({
       "type": "template",
@@ -387,17 +514,153 @@ bot.on('message', function(event) {
           "type": "buttons",
           "text": "要在幾點提醒呢？",
           "actions": [
-              {               
+              {
                 "type": "datetimepicker",
                 "label": "選擇時間",
                 "data": "t2",
-                "mode": "time",                
+                "mode": "time",
+              }
+          ]
+      }
+    });
+  };
+  function add_yes(){
+    rem = 0;
+    event.reply({
+      "type": "text",
+      "text": "好的！那我會在" + week + time + "時提醒你吃" + med + "的藥!"
+    });
+    showTime(); 
+  };
+  function add_no(){
+    rem = 2;
+    event.reply({
+      "type": "template",
+      "altText": "更改提醒錯誤",
+      "template": {
+          "type": "buttons",
+          "text": "我記錯了什麼內容呢？",
+          "actions": [
+              {
+                "type": "message",
+                "label": "藥物種類",
+                "text": "藥物種類"
+              },
+              {
+                "type": "message",
+                "label": "提醒日期",
+                "text": "提醒日期"
+              },
+              {
+                "type": "message",
+                "label": "提醒時間",
+                "text": "提醒時間"
+              }
+          ]
+      }
+    });
+  }; 
+  function add_check(){
+    event.reply({
+      "type": "template",
+      "altText": "確認提醒內容",
+      "template": {
+          "type": "confirm",
+          "text": "你是要在" + week + "的" + time + "吃" + med + "的藥, 對嗎？",
+          "actions": [
+              {
+                "type": "message",
+                "label": "是的",
+                "text": "是的，沒錯"
+              },
+              {
+                "type": "message",
+                "label": "不對",
+                "text": "不對，有錯誤"
               }
           ]
       }
     });
   };
 
+  //========================================
+  //查看提醒
+  //========================================
+  function read_med(){
+    event.reply({
+      "type": "flex",
+      "altText": "Flex Message",
+      "contents": {
+        "type": "bubble",
+        "direction": "ltr",
+        "body": {
+          "type": "box",
+          "layout": "vertical",
+          "spacing": "sm",
+          "contents": [
+            {
+              "type": "text",
+              "text": "藥物種類",
+              "size": "xl",
+              "align": "start",
+              "weight": "bold"
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "box",
+              "layout": "horizontal",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "間隔時間:"
+                },
+                {
+                  "type": "text",
+                  "text": "週/每天",
+                  "size": "lg",
+                  "weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "box",
+              "layout": "horizontal",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "提醒時間:"
+                },
+                {
+                  "type": "text",
+                  "text": "XX:XX",
+                  "size": "lg",
+                  "weight": "bold"
+                }
+              ]
+            }
+          ]
+        },
+        "footer": {
+          "type": "box",
+          "layout": "horizontal",
+          "flex": 1,
+          "contents": [
+            {
+              "type": "button",
+              "action": {
+                "type": "message",
+                "label": "刪除此提醒",
+                "text": "刪除提醒"
+              },
+              "style": "secondary"
+            }
+          ]
+        }
+      }
+    });
+  };
 
 });
   //--
@@ -433,6 +696,29 @@ bot.on('message', function(event) {
   });
   */
   //========================================
+
+//========================================
+
+// 主動發送訊息
+function showTime(){
+    clearTimeout(timer1);
+
+    //var userId = 'Uc06508e2f98922cacce2c8e489a24f84';
+    var today = new Date();
+    var h = (today.getHours()<10 ? '0'+(today.getHours()) : today.getHours()); //h=h+8;
+    var m = (today.getMinutes()<10 ? '0'+(today.getMinutes()) : today.getMinutes());
+    var nowTime = h + ":" + m;
+
+    if(nowTime == time){
+      bot.push(userId, ["已經"+time+"了，記得要吃"+med+"的藥喔！"]);
+    /*console.log('userId: ' + userId);
+    console.log('send: ' + nowTime);*/
+      return;      
+    }
+
+    timer1 = setInterval(showTime, 10000);
+
+};
 
 
 //----------------------------------------
