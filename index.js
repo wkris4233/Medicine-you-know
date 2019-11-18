@@ -142,7 +142,7 @@ bot.on('message', function(event) {
 //查詢位置
 //========================================
   function loc(){
-    locNum = 1;
+    
     event.reply({      
       "type": "template",
       "altText": "查詢附近院所",
@@ -157,7 +157,7 @@ bot.on('message', function(event) {
         ]
       }
     });
-
+    locNum = 1;
 
   };
 
