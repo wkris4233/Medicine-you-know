@@ -170,9 +170,8 @@ bot.on('message', function(event) {
                         {
                           "type": 'location',
                           "title": 'my location',
-                          "address": '新北市板橋區府中路62號',
-                          "latitude": "",
-                          "longitude":""
+                          "address": '新北市板橋區府中路62號'
+
                         },
                         {
                             "type": "postback",
