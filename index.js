@@ -159,52 +159,67 @@ bot.on('message', function(event) {
           "type": "template",
           "altText": "this is a carousel template",
           "template": {
-            "type": "carousel",
-            "columns": [
-              {
-                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-                "title": "一誠藥局",
-                "text": "新北市板橋區府中路62號",
-                "actions": [
+              "type": "carousel",
+              "columns": [
                   {
-                    "type": 'location',
-                    "title": 'my location',
-                    "address": '新北市板橋區府中路62號',
-                    "latitude": "",
-                    "longitude":""
-                    
-                  }
-                ]
-              },
-              {
-                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-                "title": "廣泰藥局",
-                "text": "新北市板橋區館前西路150號",
-                "actions": [
+                    "thumbnailImageUrl": "https://example.com/bot/images/item1.jpg",
+                    "imageBackgroundColor": "#FFFFFF",
+                    "title": "this is menu",
+                    "text": "description",
+                    "defaultAction": {
+                        "type": "uri",
+                        "label": "View detail",
+                        "uri": "http://example.com/page/123"
+                    },
+                    "actions": [
+                        {
+                            "type": "postback",
+                            "label": "Buy",
+                            "data": "action=buy&itemid=111"
+                        },
+                        {
+                            "type": "postback",
+                            "label": "Add to cart",
+                            "data": "action=add&itemid=111"
+                        },
+                        {
+                            "type": "uri",
+                            "label": "View detail",
+                            "uri": "http://example.com/page/111"
+                        }
+                    ]
+                  },
                   {
-                    "type": 'location',
-                    "title": 'my location',
-                    "address": '新北市板橋區館前西路150號',
-                    "latitude": "",
-                    "longitude":"" 
+                    "thumbnailImageUrl": "https://example.com/bot/images/item2.jpg",
+                    "imageBackgroundColor": "#000000",
+                    "title": "this is menu",
+                    "text": "description",
+                    "defaultAction": {
+                        "type": "uri",
+                        "label": "View detail",
+                        "uri": "http://example.com/page/222"
+                    },
+                    "actions": [
+                        {
+                            "type": "postback",
+                            "label": "Buy",
+                            "data": "action=buy&itemid=222"
+                        },
+                        {
+                            "type": "postback",
+                            "label": "Add to cart",
+                            "data": "action=add&itemid=222"
+                        },
+                        {
+                            "type": "uri",
+                            "label": "View detail",
+                            "uri": "http://example.com/page/222"
+                        }
+                    ]
                   }
-                ]
-              },
-              {
-                "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
-                "title": "長青連鎖藥局 皇慶藥局",
-                "text": "新北市板橋區南門街81號",
-                "actions": [
-                  {
-                    "type": 'location',
-                    "title": 'my location',
-                    "address": '新北市板橋區南門街81號',
-                    "latitude": "",
-                    "longitude":""
-                  }
-                ]
-              }
-            ]
+              ],
+              "imageAspectRatio": "rectangle",
+              "imageSize": "cover"
           }
         }
   
