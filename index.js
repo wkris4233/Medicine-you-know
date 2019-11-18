@@ -161,7 +161,7 @@ bot.on('message', function(event) {
 
   function showLoc(){
     locNum=0;
-    event.reply([
+    event.reply(
       {
         "type": "template",
         "altText": "this is a carousel template",
@@ -216,7 +216,7 @@ bot.on('message', function(event) {
         }
       }
 
-    ]);
+    );
 
 
 
