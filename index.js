@@ -76,13 +76,13 @@ bot.on('message', function(event) {
       
       locNum = 1;
       loc();
-
+      showLoc();
     }
-    if(locNum==1 || event.message.type == 'location'){
+    //if(locNum==1 || event.message.type == 'location'){
       
-        showLoc();
+        
 
-    }
+    //}
 
 
 
