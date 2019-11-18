@@ -74,7 +74,7 @@ bot.on('message', function(event) {
     //位置
     if(msg=="查詢附近院所"){
 
-      loc();
+      locNum=0;
       
 
     }
@@ -85,8 +85,10 @@ bot.on('message', function(event) {
   } 
   
   switch(locNum){
+    case 0:
+      loc();
     case 1:
-        showLoc();
+      showLoc();
     break;
   }
 
@@ -163,7 +165,7 @@ bot.on('message', function(event) {
 
 
   function showLoc(){
-    locNum=0;
+    
     event.reply(
       {
         "type": "template",
