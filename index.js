@@ -80,7 +80,13 @@ bot.on('message', function(event) {
 
     }
     
-    
+    if(msg=="新北市"){
+
+      showLoc();
+
+      
+
+    }
 
 
 
