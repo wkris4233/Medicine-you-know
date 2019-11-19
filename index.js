@@ -78,7 +78,12 @@ bot.on('message', function(event) {
       
 
     }
-    showLoc();
+    
+    if(event.message.type == 'location'){
+      showLoc();
+          
+  
+    }
 
 
 
@@ -95,11 +100,7 @@ bot.on('message', function(event) {
 
 
   
-  /*if(locNum==1 || event.message.type == 'location'){
-    showLoc();
-        
-
-  }*/
+  
   
 
   
