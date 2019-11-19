@@ -79,16 +79,18 @@ bot.on('message', function(event) {
 
     }
     
-    if(event.message.type == 'location'){
-      showLoc();
-          
-  
-    }
+    
 
 
 
   } 
   
+
+  if(event.message.type == 'location'){
+    showLoc();
+        
+
+  }
   /*switch(locNum){
     case 0:
       loc();
