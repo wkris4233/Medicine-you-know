@@ -7,6 +7,7 @@ var express = require('express');
 const findMed = require('./utility/findMed');
 const addUser = require('./utility/addUser');
 const add_remind = require('./utility/add_remind');
+const del_remind = require('./utility/del_remind');
 const readMed = require('./utility/readMed');
 // set timezone 抓取台灣時間
 process.env.TZ = 'Asia/Taipei';
@@ -61,15 +62,13 @@ bot.on('postback', function(event) {
 bot.on('message', function(event) {    
     var kwt = event.message.type; //--kWtype key word type
     var msg = event.message.text; //--msg 
-    var n=0; 
+    var n ; 
     if(msg=='查詢附近院所'){
-        log(event,kwt,n)
+        log(event,kwt,n);
     }
     if(kwt='location'){
-        console.log(event.message);
+       
         console.log(event.message.address);
-        console.log(event.message.getAddress);
-        console.log(event.message.getid);
     }
     //-----------------------------------------
     if (kwt = 'text') {
@@ -86,8 +85,17 @@ bot.on('message', function(event) {
             case '查看紀錄':
                 readMed.med(event)
                 break
+            case '刪除提醒' :
+                del_remind.med(event);
+                break
+            case '確定刪除提醒':
+                del_remind.yes(event);
+                break
+            case '沒有要刪除提醒':
+                del_remind.no(event);
+                break
         }
-
+ 
         switch(rem){
             case 1:
                 if(msg=='感冒' || msg=='糖尿病' || msg=='高血壓' || msg=='其他的藥物') {
@@ -144,8 +152,8 @@ bot.on('message', function(event) {
         }
     
     //呼叫API取得藥品資料
-    if(n=1){
-        console.log(msg);
+    if(event.message.address!=nullU10239a
+      ){
             event.source.profile().then(function (profile) {
                 event.reply({
        
@@ -194,8 +202,8 @@ bot.on('message', function(event) {
                    ]
                  }
                });
-              
-           });
+           
+              });
        
     }else {
         findMed.fetchMedicine(msg).then(data => { 
