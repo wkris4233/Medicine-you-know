@@ -1,13 +1,15 @@
-﻿//----------------------------------------
+//----------------------------------------
 // 載入必要的模組
 //----------------------------------------
 var linebot = require('linebot');
 var express = require('express');
-
 //增加引用函式
-const student = require('./utility/student.js');
-
-
+const findMed = require('./utility/findMed');
+const addUser = require('./utility/addUser');
+const add_remind = require('./utility/add_remind');
+const readMed = require('./utility/readMed');
+// set timezone 抓取台灣時間
+process.env.TZ = 'Asia/Taipei';
 //----------------------------------------
 // 填入自己在Line Developers的channel值
 //----------------------------------------
@@ -16,14 +18,11 @@ var bot = linebot({
     channelSecret: 'ec6bc0f096e29b5fff7e8af115e8d6b1',
     channelAccessToken: 'f0bK6NHPzp383Ia8AgRrY4EbeE9Be6sEnh8WqhRKFOR3264N9U+g6RqkoHJbegcR0oh9AWzwrsf+5fndCTnu0M0LQOKpRT7U1Y7LymMTxJjFr7h9TgzdCMLmo2FvTFwY9I+CIHUks01ypKfO0ug2EAdB04t89/1O/w1cDnyilFU='
 });
-
-
+//=========育婷==區域=========================================================
 //提醒用藥新增變數
-var rem=0;
-var med, week, time;
-//查詢附近院所新增變數
-var locNum=0;
-var locText;
+var rem = 0;
+var med, week, time, userId;
+var timer1;
 
 //========================================
 // 機器人接受回覆的處理
@@ -32,130 +31,226 @@ bot.on('postback', function(event) {
     time = event.postback.params.time;
 
     event.source.profile().then(function (profile) {
-    
-
-        event.reply([
-            {
-                "type": "text",
-                "text": "好的！那我會在" + week + time + "時提醒你吃" + med + "的藥"
-            }
-        ]);   
+        
+        userId = profile.userId;
+        event.reply({
+          "type": "template",
+          "altText": "確認提醒內容",
+          "template": {
+              "type": "confirm",
+              "text": "你是要在" + week + "的" + time + "吃" + med + "的藥, 對嗎？",
+              "actions": [
+                  {
+                    "type": "message",
+                    "label": "是的",
+                    "text": "是的，沒錯"
+                  },
+                  {
+                    "type": "message",
+                    "label": "不對",
+                    "text": "不對，有錯誤"
+                  }
+              ]
+          }
+        });   
     });
-
 });
-//========================================
-
 //========================================
 // 機器人接受訊息的處理
 //========================================
-bot.on('message', function(event) {  
-
-  if (event.message.type = 'text') {
-    var msg = event.message.text;
-    if(msg=="提醒用藥") remind();
-    //新增提醒
-    if(msg=="新增提醒") add_med();
-    if(msg=="感冒" || msg=="糖尿病" || msg=="高血壓") {
-      med = event.message.text;
-      add_week();
+bot.on('message', function(event) {    
+    var kwt = event.message.type; //--kWtype key word type
+    var msg = event.message.text; //--msg 
+    var n=0; 
+    if(msg=='查詢附近院所'){
+        log(event,kwt,n)
     }
-    if(msg.indexOf('星期') != -1 || msg=="每天"){
-      week = event.message.text;
-      add_time();
+    if(kwt='location'){
+        console.log(event.message);
+        console.log(event.message.address);
+        console.log(event.message.getAddress);
+        console.log(event.message.getid);
     }
-
-
-    //查看紀錄
-
-
-
-
-
-    //位置
-    if(msg=="查詢附近院所"){
-
-      loc();
-
-      
-
-    }
-    
-    if(msg=="新北市"){
-
-      showLoc();
-
-      
-
-    }
-
-
-
-  } 
-  else if (event.message.type == 'location'){
-      
-    showLoc();
-        
-
-  }
-
-  
-  /*switch(locNum){
-    case 0:
-      loc();
-      locNum=1;
-    case 1:
-      showLoc();
-    break;
-  }*/
-
-
-  
-  
-  
-
-  
-
-    event.source.profile().then(
-        function (profile) {
-          
-      
-            //使用者傳來的學號
-            const no = event.message.text;
-          
-            //呼叫API取得學生資料
-            student.fetchStudent(no).then(data => {  
-                if (data == -1){
-                    event.reply('找不到資料');
-                }else if(data == -9){                    
-                    event.reply('執行錯誤');
-                    console.log(no);
-                }else{
-                    /*if (data.formulation="null"){
-                        data.formulation="";
-                    }
-                    if (data.package="null"){
-                        data.package="";
-                    }*/
-                    event.reply([
-                        
-                        {'type':'text',
-                         'text':"中文品名:"+data.medNameCh+"\n"
-                         +"英文品名:"+ data.medNameEn+"\n"
-                         +"外觀:"+ data.formulation+"  "+data.package+"\n"
-                         + "適應症:"+ data.indication}]
-                    );  
-                }  
-            })  
+    //-----------------------------------------
+    if (kwt = 'text') {
+       
+        switch(msg){
+            
+            case '提醒用藥': 
+                add_remind.remind(event)
+                break
+            case '新增提醒':
+                rem = 1
+                add_remind.med(event)
+                break
+            case '查看紀錄':
+                readMed.med(event)
+                break
         }
-    );
-  
+
+        switch(rem){
+            case 1:
+                if(msg=='感冒' || msg=='糖尿病' || msg=='高血壓' || msg=='其他的藥物') {
+                med= msg
+                add_remind.week(event)
+                }
+                if(msg.indexOf('星期') != -1 || msg=="每天"){
+                    week = msg;
+                    add_remind.time(event,week,time,med);
+                  }
+                  if(msg.indexOf('是') != -1) {
+                    //-add_remind.yes(event)
+                    event.reply({
+                        "type": "text",
+                        "text": "好的！那我會在" + week + time + "時提醒你吃" + med + "的藥!"
+                      });
+                    rem=0
+                    showTime()
+                  }
+                  
+                  if(msg.indexOf('不對') != -1){
+                    rem = 2
+                    add_remind.no(event)
+                  }
+                
+            case 2:
+                switch(msg){
+                    case '藥物種類':
+                        add_remind.med(event)
+                        break
+                    case '提醒日期':
+                        add_remind.week(event)
+                        break
+                    case '提醒時間':
+                        add_remind.time(event)
+                        break
+                    case '感冒' || '糖尿病' || '高血壓' || '其他的藥物' :
+                        med=msg
+                        add_remind.check(event)
+                        break
+                }
+                switch(msg.indexOf){
+                    case ('星期'!=-1||msg == '每天') :
+                            week = msg
+                            add_time(event);
+                            break
+                    case ('是'!=-1):
+                        add_remind.yes(event)
+                        break
+                    case('不對'!=-1):
+                        add_remind.no(event)
+                        break
+                }
+        }
     
-
+    //呼叫API取得藥品資料
+    if(n=1){
+        console.log(msg);
+            event.source.profile().then(function (profile) {
+                event.reply({
+       
+                 "type": "template",
+                 "altText": "this is a carousel template",
+                 "template": {
+                   "type": "carousel",
+                   "columns": [
+                     {
+                       
+                       "title": "一誠藥局",
+                       "text": "新北市板橋區府中路62號",
+                       "actions": [
+                         {
+                           "type": "uri",
+                           "label": "顯示地圖",
+                           "uri": "https://goo.gl/maps/mbNWqQuUfMRaHQ2z6"
+                           
+                         }
+                       ]
+                     },
+                     {
+                       
+                       "title": "廣泰藥局",
+                       "text": "新北市板橋區館前西路150號",
+                       "actions": [
+                         {
+                           "type": "uri",
+                           "label": "顯示地圖",
+                           "uri": "https://goo.gl/maps/zbmZchRQ5CwuC3C18"
+                         }
+                       ]
+                     },
+                     {
+                       
+                       "title": "長青連鎖藥局 皇慶藥局",
+                       "text": "新北市板橋區南門街81號",
+                       "actions": [
+                         {
+                           "type": "uri",
+                           "label": "顯示地圖",
+                           "uri": "https://goo.gl/maps/oSdCXzA3zZY2Fvgh8"
+                         }
+                       ]
+                     }
+                   ]
+                 }
+               });
+              
+           });
+       
+    }else {
+        findMed.fetchMedicine(msg).then(data => { 
+           
+            if (data == -1){
+                event.reply('找不到資料');
+                console.log(msg);
+            }else if(data == -9){                    
+                event.reply('無法辨認你說的意思');
+              
+            }else{
+                
+                event.reply([
+                    
+                    {'type':'text',
+                     'text':"中文品名:"+data.medNameCh+"\n"
+                     +"英文品名:"+ data.medNameEn+"\n"
+                     +"外觀:"+ data.formulation+"  "+data.package+"\n"
+                     + "適應症:"+ data.indication}]
+                );   
+            }  
+        })
+    }
+    
+}  
+   
+       
+       
+    
+    //-----------------------------------------
+    });
 
 //========================================
-//查詢位置
-//========================================
-  function loc(){
+//--showTime()----------------------------
+function showTime(){
+    clearTimeout(timer1);
+
+    //var userId = 'Uc06508e2f98922cacce2c8e489a24f84';
+    var today = new Date();
+    var h = (today.getHours()<10 ? '0'+(today.getHours()) : today.getHours()); //h=h+8;
+    var m = (today.getMinutes()<10 ? '0'+(today.getMinutes()) : today.getMinutes());
+    var nowTime = h + ":" + m;
+
+    if(nowTime == time){
+      bot.push(userId, ["已經"+time+"了，記得要吃"+med+"的藥喔！"]);
+    /*console.log('userId: ' + userId);
+    console.log('send: ' + nowTime);*/
+      return;      
+    }
+
+    timer1 = setInterval(showTime, 10000);
+
+};
+
+function log(event,kwt,n){
     
     event.reply({      
       "type": "template",
@@ -171,276 +266,9 @@ bot.on('message', function(event) {
         ]
       }
     });
-    locNum = 1;
+     n=1;   
 
   };
-
-
-  function showLoc(){
-    
-    event.reply(
-      {
-        "type": "template",
-        "altText": "this is a carousel template",
-        "template": {
-          "type": "carousel",
-          "columns": [
-            {
-              
-              "title": "一誠藥局",
-              "text": "新北市板橋區府中路62號",
-              "actions": [
-                {
-                  "type": "uri",
-                  "label": "顯示地圖",
-                  "uri": "https://goo.gl/maps/mbNWqQuUfMRaHQ2z6"
-                  
-                }
-              ]
-            },
-            {
-              
-              "title": "廣泰藥局",
-              "text": "新北市板橋區館前西路150號",
-              "actions": [
-                {
-                  "type": "uri",
-                  "label": "顯示地圖",
-                  "uri": "https://goo.gl/maps/zbmZchRQ5CwuC3C18"
-                }
-              ]
-            },
-            {
-              
-              "title": "長青連鎖藥局 皇慶藥局",
-              "text": "新北市板橋區南門街81號",
-              "actions": [
-                {
-                  "type": "uri",
-                  "label": "顯示地圖",
-                  "uri": "https://goo.gl/maps/oSdCXzA3zZY2Fvgh8"
-                }
-              ]
-            }
-          ]
-        }
-      }
-
-    );
-  };
-
-  /*
-  function handleLocation(message, replyToken) {
-    return client.replyMessage(
-      replyToken,
-      {
-        type: 'location',
-        title: message.title,
-        address: message.address,
-        latitude: message.latitude,
-        longitude: message.longitude,
-      }
-    );
-  }
-  */
-
-  //========================================
-  //提醒用藥
-  //========================================
-  function remind(){
-    //rem=1;
-    event.reply({
-      "type": "template",
-      "altText": "提醒用藥分類",
-      "template": {
-          "type": "confirm",
-          "text": "你要新增提醒吃藥的時間呢？還是要查看之前的提醒紀錄？",
-          "actions": [
-              {
-                "type": "message",
-                "label": "新增提醒",
-                "text": "新增提醒"
-              },
-              {
-                "type": "message",
-                "label": "查看紀錄",
-                "text": "查看紀錄"
-              }
-          ]
-      }
-    });
-  };
-  function add_med(){
-    event.reply({
-      "type": "template",
-      "altText": "提醒用藥分類",
-      "template": {
-          "type": "buttons",
-          "text": "需要提醒什麼種類的藥呢？",
-          "actions": [
-              {
-                "type": "message",
-                "label": "感冒",
-                "text": "感冒"
-              },
-              {
-                "type": "message",
-                "label": "糖尿病",
-                "text": "糖尿病"
-              },
-              {
-                "type": "message",
-                "label": "高血壓",
-                "text": "高血壓"
-              },
-              {
-                "type": "message",
-                "label": "其他的藥物",
-                "text": "其他的藥物"
-              }
-          ]
-      }
-    });
-  };
-  function add_week(){
-    event.reply([
-      {
-        "type": "text",
-        "text": "需要哪些天提醒呢？"
-      },
-      {
-        "type": "template",
-        "altText": "this is a image carousel template",
-        "template": {
-            "type": "image_carousel",
-            "columns": [
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "每天",
-                  "text": "每天"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期一",
-                  "text": "星期一"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期二",
-                  "text": "星期二"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期三",
-                  "text": "星期三"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期四",
-                  "text": "星期四"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期五",
-                  "text": "星期五"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期六",
-                  "text": "星期六"
-                }
-              },
-              {
-                "imageUrl": "https://www.cats.org.uk/uploads/images/featurebox_sidebar_kids/grief-and-loss.jpg",
-                "action": {
-                  "type": "message",
-                  "label": "星期日",
-                  "text": "星期日"
-                }
-              }
-            ]
-        }
-      }
-    ]);
-  };
-
-
-  function add_time(){
-    event.reply({
-      "type": "template",
-      "altText": "選擇提醒時間",
-      "template": {
-          "type": "buttons",
-          "text": "要在幾點提醒呢？",
-          "actions": [
-              {               
-                "type": "datetimepicker",
-                "label": "選擇時間",
-                "data": "t2",
-                "mode": "time",                
-              }
-          ]
-      }
-    });
-  };
-
-
-});
-  //--
-  /*
-  bot.on('message', function(event) {
-      event.reply({
-          "type": "template",
-         
-          "template": {
-              "type": "buttons",
-              "thumbnailImageUrl": "https://newone-1.herokuapp.com/imgs/med01.jpg",
-              "imageAspectRatio": "rectangle",
-              "imageSize": "cover",
-              "imageBackgroundColor": "#FFFFFF",
-              "title": "來克炎腸溶錠50公絲",
-              "text": "DICLOREN E.C. TABLETS 50MG DICLOFENAC 'WEIDAR'",
-              
-              "actions": [
-                  {
-                    "type": "postback",
-                    "label": "就是他",
-                    "data": "action=buy&itemid=123"
-                  },
-                  
-                  {
-                    "type": "uri",
-                    "label": "詳細資料",
-                    "uri": "http://www.taiwan-pharma.org.tw/public/medicine_showdetail.php?sn=A028017100"
-                  }
-              ]
-          }
-        });
-  });
-  */
-  //========================================
-
-
 //----------------------------------------
 // 建立一個網站應用程式app
 // 如果連接根目錄, 交給機器人處理

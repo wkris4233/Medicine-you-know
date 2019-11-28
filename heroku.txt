@@ -1,0 +1,18 @@
+Please note that these credentials are not permanent.
+
+Heroku rotates credentials periodically and updates applications where this database is attached.
+
+Host
+ec2-54-83-201-84.compute-1.amazonaws.com
+Database
+d188jq1hm7j0iu
+User
+aztfiopwckcwtf
+Port
+5432
+Password
+f82be8510e51b51874e187c04e64fbd483caa40e761bdbc410761b22502f5e48
+URI
+postgres://aztfiopwckcwtf:f82be8510e51b51874e187c04e64fbd483caa40e761bdbc410761b22502f5e48@ec2-54-83-201-84.compute-1.amazonaws.com:5432/d188jq1hm7j0iu
+Heroku CLI
+heroku pg:psql postgresql-opaque-13658 --app newone-1

@@ -1,0 +1,41 @@
+event.source.profile().then(function (profile) {
+        
+    
+          //使用者傳來的資料
+          const no = event.message.text;
+        
+
+          if(no=='註冊'){
+            //取得使用者資料
+            const userName = profile.displayName;
+            const userId = profile.userId;
+            addUser.usNo();
+            //--register 註冊  id,name--------
+            /*
+           addUser.addUs(userId, userName).then(data => {  
+                if(data == -9){                    
+                    console.log('執行錯誤');
+                }else{
+                    console.log('已增加' + data + '筆記錄');
+                }  
+            })
+            */
+            //-------------------------------------------------
+          }else{
+
+          }
+          //呼叫API取得藥物資料
+          findMed.fetchMedicine(no).then(data => {  
+              if (data == -1){
+                  event.reply('找不到資料');
+              }else if(data == -9){                    
+                  event.reply('執行錯誤');
+                  console.log(no);
+              }else{
+                event.reply({type:'text', text: data.medNameCh+data.medNameEn});  
+              }  
+          })  
+
+         
+                
+    });
