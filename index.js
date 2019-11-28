@@ -241,6 +241,22 @@ bot.on('message', function(event) {
                         "contents": [
                           {
                             "type": "text",
+                            "text": "英文名稱:"
+                          },
+                          {
+                            "type": "text",
+                            "text": data.medNameEn,
+                            "size": "lg",
+                            "weight": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                          {
+                            "type": "text",
                             "text": "外觀"
                           },
                           {
