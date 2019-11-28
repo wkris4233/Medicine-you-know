@@ -152,8 +152,7 @@ bot.on('message', function(event) {
         }
     
     //呼叫API取得藥品資料
-    if(event.message.address!=nullU10239a
-      ){
+    if(event.message.address!=null){
             event.source.profile().then(function (profile) {
                 event.reply({
        
