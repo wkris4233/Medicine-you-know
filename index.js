@@ -214,15 +214,64 @@ bot.on('message', function(event) {
                 event.reply('無法辨認你說的意思');
               
             }else{
-                
-                event.reply([
-                    
-                    {'type':'text',
-                     'text':"中文品名:"+data.medNameCh+"\n"
-                     +"英文品名:"+ data.medNameEn+"\n"
-                     +"外觀:"+ data.formulation+"  "+data.package+"\n"
-                     + "適應症:"+ data.indication}]
-                );   
+              event.reply({
+                "type": "flex",
+                "altText": "Flex Message",
+                "contents": {
+                  "type": "bubble",
+                  "direction": "ltr",
+                  "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "sm",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": data.medNameCh,
+                        "size": "xl",
+                        "align": "start",
+                        "weight": "bold"
+                      },
+                      {
+                        "type": "separator"
+                      },
+                      {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                          {
+                            "type": "text",
+                            "text": "外觀"
+                          },
+                          {
+                            "type": "text",
+                            "text": data.formulation+data.package,
+                            "size": "lg",
+                            "weight": "bold"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                          {
+                            "type": "text",
+                            "text": "適應症"
+                          },
+                          {
+                            "type": "text",
+                            "text": data.indication,
+                            "size": "lg",
+                            "weight": "bold"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }); 
+               
             }  
         })
     }
