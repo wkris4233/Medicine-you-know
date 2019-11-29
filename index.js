@@ -208,7 +208,7 @@ bot.on('message', function(event) {
         findMed.fetchMedicine(msg).then(data => { 
            
             if (data == -1){
-                event.reply('找不到資料');
+                event.reply('請再重新輸入一次');
                 console.log(msg);
             }else if(data == -9){                    
                 event.reply('無法辨認你說的意思');
