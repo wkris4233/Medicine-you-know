@@ -228,9 +228,17 @@ bot.on('message', function(event) {
                       {
                         "type": "text",
                         "text": data.medNameCh,
-                        "size": "xl",
+                        "size": "lg",
                         "align": "start",
-                        "weight": "bold"
+                        "weight": "bold",
+                        "wrap": false
+                      },
+                      {
+                        "type": "text",
+                        "text": data.medNameEn,
+                        "size": "xs",
+                        "align": "start",
+                        "wrap": true
                       },
                       {
                         "type": "separator"
@@ -241,29 +249,15 @@ bot.on('message', function(event) {
                         "contents": [
                           {
                             "type": "text",
-                            "text": "英文名稱:"
-                          },
-                          {
-                            "type": "text",
-                            "text": data.medNameEn,
-                            "size": "lg",
-                            "weight": "bold"
-                          }
-                        ]
-                      },
-                      {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                          {
-                            "type": "text",
-                            "text": "外觀"
+                            "text": "外觀: ",
+                            "flex": 3,
+                            "color": "#999898"
                           },
                           {
                             "type": "text",
                             "text": data.formulation+data.package,
-                            "size": "lg",
-                            "weight": "bold"
+                            "flex": 8,
+                            "wrap": true
                           }
                         ]
                       },
@@ -273,13 +267,17 @@ bot.on('message', function(event) {
                         "contents": [
                           {
                             "type": "text",
-                            "text": "適應症"
+                            "text": "適應症: ",
+                            "flex": 3,
+                            "color": "#999898"
                           },
                           {
                             "type": "text",
                             "text": data.indication,
-                            "size": "lg",
-                            "weight": "bold"
+                            "flex": 8,
+                            "align": "start",
+                            "gravity": "center",
+                            "wrap": true
                           }
                         ]
                       }
