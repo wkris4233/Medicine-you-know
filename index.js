@@ -204,7 +204,7 @@ bot.on('message', function(event) {
            
               });
        
-    }else {
+    }else if(msg!='提醒用藥'){
         findMed.fetchMedicine(msg).then(data => { 
            
             if (data == -1){
