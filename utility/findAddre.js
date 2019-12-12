@@ -13,7 +13,7 @@ var fetchAddre = async function(addreKey){
     var addre2 = substring(addreKey,1,CHARINDEX('路',addreKey));
     console.log(addre2);
     //讀取資料庫
-    await query('SELECT * from hosp where  hosp."hospAddre"  )',[addre2+'%'])
+    await query('SELECT * from hosp where hosp."hospAddre" like $1',[addre2+'%'])
         .then((data) => {
             
             if(data.rows.length > 0){

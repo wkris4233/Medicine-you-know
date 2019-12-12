@@ -202,7 +202,20 @@ bot.on('message', function(event) {
                      "uri": "https://goo.gl/maps/oSdCXzA3zZY2Fvgh8"
                    }
                  ]
-               }
+               },
+               {
+                 
+                "title": data.hospName,
+                "text": data.hospAddre,
+                "actions": [
+                  {
+                    "type": "uri",
+                    "label": "顯示地圖",
+                    "uri": "https://goo.gl/maps/mbNWqQuUfMRaHQ2z6"
+                    
+                  }
+                ]
+              }
              ]
            }
          });
