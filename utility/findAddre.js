@@ -11,7 +11,7 @@ var fetchAddre = async function(addreKey){
     let result;  
 
     //讀取資料庫
-    await query('SELECT * from hosp where hosp."hospAddre" LIKE $1',['%'+addreKey+'%'])
+    await query('SELECT * from hosp where  hosp."hospAddre" ',[substring('addreKey',1,CHARINDEX('路','addreKey'))])
         .then((data) => {
 
             if(data.rows.length > 0){
