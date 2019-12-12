@@ -156,8 +156,8 @@ bot.on('message', function(event) {
     //呼叫API取得藥品資料
     if(event.message.address!=null){
 
-      findAddre.fetchAddre(substring(addre,1,CHARINDEX('路',addre))).then(data => {
-        
+      findAddre.fetchAddre(addre).then(data => {
+
         event.source.profile().then(function (profile) {
           event.reply({
  

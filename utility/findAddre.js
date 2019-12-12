@@ -9,9 +9,11 @@ const query = require('./asyncDB');
 var fetchAddre = async function(addreKey){
     //存放結果
     let result;  
-    console.log(addreKey);
+    
+    var addre2 = substring(addreKey,1,CHARINDEX('路',addreKey));
+    console.log(addre2);
     //讀取資料庫
-    await query('SELECT * from hosp where  hosp."hospAddre"  )',['%'+addreKey+'%'])
+    await query('SELECT * from hosp where  hosp."hospAddre"  )',[addre2+'%'])
         .then((data) => {
             
             if(data.rows.length > 0){
