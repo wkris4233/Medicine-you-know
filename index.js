@@ -1,10 +1,11 @@
-//----------------------------------------
+﻿//----------------------------------------
 // 載入必要的模組
 //----------------------------------------
 var linebot = require('linebot');
 var express = require('express');
 //增加引用函式
 const findMed = require('./utility/findMed');
+const findAddre = require('./utility/findAddre');
 const addUser = require('./utility/addUser');
 const add_remind = require('./utility/add_remind');
 const del_remind = require('./utility/del_remind');
@@ -61,13 +62,14 @@ bot.on('postback', function(event) {
 //========================================
 bot.on('message', function(event) {    
     var kwt = event.message.type; //--kWtype key word type
-    var msg = event.message.text; //--msg 
+    var msg = event.message.text; //--msg
+    var addre = event.message.address; //--address
     var n ; 
     if(msg=='查詢附近院所'){
         log(event,kwt,n);
     }
     if(kwt='location'){
-       
+
         console.log(event.message.address);
     }
     //-----------------------------------------
@@ -153,56 +155,66 @@ bot.on('message', function(event) {
     
     //呼叫API取得藥品資料
     if(event.message.address!=null){
-            event.source.profile().then(function (profile) {
-                event.reply({
-       
-                 "type": "template",
-                 "altText": "this is a carousel template",
-                 "template": {
-                   "type": "carousel",
-                   "columns": [
-                     {
-                       
-                       "title": "一誠藥局",
-                       "text": "新北市板橋區府中路62號",
-                       "actions": [
-                         {
-                           "type": "uri",
-                           "label": "顯示地圖",
-                           "uri": "https://goo.gl/maps/mbNWqQuUfMRaHQ2z6"
-                           
-                         }
-                       ]
-                     },
-                     {
-                       
-                       "title": "廣泰藥局",
-                       "text": "新北市板橋區館前西路150號",
-                       "actions": [
-                         {
-                           "type": "uri",
-                           "label": "顯示地圖",
-                           "uri": "https://goo.gl/maps/zbmZchRQ5CwuC3C18"
-                         }
-                       ]
-                     },
-                     {
-                       
-                       "title": "長青連鎖藥局 皇慶藥局",
-                       "text": "新北市板橋區南門街81號",
-                       "actions": [
-                         {
-                           "type": "uri",
-                           "label": "顯示地圖",
-                           "uri": "https://goo.gl/maps/oSdCXzA3zZY2Fvgh8"
-                         }
-                       ]
-                     }
-                   ]
-                 }
-               });
-           
-              });
+
+      findAddre.fetchAddre(addre).then(data => {
+
+        event.source.profile().then(function (profile) {
+          event.reply({
+ 
+           "type": "template",
+           "altText": "this is a carousel template",
+           "template": {
+             "type": "carousel",
+             "columns": [
+               {
+                 
+                 "title": data.hospName,
+                 "text": data.hospAddre,
+                 "actions": [
+                   {
+                     "type": "uri",
+                     "label": "顯示地圖",
+                     "uri": "https://goo.gl/maps/mbNWqQuUfMRaHQ2z6"
+                     
+                   }
+                 ]
+               },
+               {
+                 
+                 "title": data.hospName,
+                 "text": data.hospAddre,
+                 "actions": [
+                   {
+                     "type": "uri",
+                     "label": "顯示地圖",
+                     "uri": "https://goo.gl/maps/zbmZchRQ5CwuC3C18"
+                   }
+                 ]
+               },
+               {
+                 
+                 "title": data.hospName,
+                 "text": data.hospAddre,
+                 "actions": [
+                   {
+                     "type": "uri",
+                     "label": "顯示地圖",
+                     "uri": "https://goo.gl/maps/oSdCXzA3zZY2Fvgh8"
+                   }
+                 ]
+               }
+             ]
+           }
+         });
+     
+        });
+
+      })
+      
+
+
+
+            
        
     }else if(msg!='提醒用藥'){
         findMed.fetchMedicine(msg).then(data => { 
