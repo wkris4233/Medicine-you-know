@@ -9,11 +9,11 @@ const query = require('./asyncDB');
 var fetchAddre = async function(addreKey){
     //存放結果
     let result;  
-
+    console.log(addreKey);
     //讀取資料庫
-    await query('SELECT * from hosp where  hosp."hospAddre" ',[substring('addreKey',1,CHARINDEX('路','addreKey'))])
+    await query('SELECT * from hosp where  hosp."hospAddre"  )',['%'+addreKey+'%'])
         .then((data) => {
-
+            
             if(data.rows.length > 0){
                 result = data.rows[0];  //學生資料(物件)
                 console.log('****dataFind');
