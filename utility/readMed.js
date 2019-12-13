@@ -5,7 +5,7 @@ const query = require('./asyncDB');
 //------------------------------------------
 // 由關鍵字查詢藥品資料
 //------------------------------------------
-var med = async function(eventusId){
+var med = async function(event,usId){
   //存放結果
   let result;  
 
