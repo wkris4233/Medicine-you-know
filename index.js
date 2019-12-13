@@ -61,6 +61,10 @@ bot.on('postback', function(event) {
 // 機器人接受訊息的處理
 //========================================
 bot.on('message', function(event) {    
+  event.source.profile().then(function (profile) {
+    var usId= profile.userId;
+    var usName = profile.displayName;
+    
     var kwt = event.message.type; //--kWtype key word type
     var msg = event.message.text; //--msg
     var addre = event.message.address; //--address
@@ -168,7 +172,7 @@ bot.on('message', function(event) {
 
       findAddre.fetchAddre(addre).then(data => {
 
-        event.source.profile().then(function (profile) {
+        
           event.reply({
  
            "type": "template",
@@ -230,7 +234,7 @@ bot.on('message', function(event) {
            }
          });
      
-        });
+        
 
       })
       
@@ -329,7 +333,7 @@ bot.on('message', function(event) {
    
        
        
-    
+}
     //-----------------------------------------
     });
 
