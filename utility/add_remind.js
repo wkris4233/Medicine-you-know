@@ -8,7 +8,7 @@ process.env.TZ = 'Asia/Taipei';
 //提醒用藥
 //========================================
 
-//--增加提醒----------------------------------
+//--新增或查看 吃藥紀錄----------------------------------
 var remind = async function(event) {
   event.reply({
       "type": "template",
@@ -378,7 +378,87 @@ var check = async  function(event){
     });
   };
 
+//===== 更改開始===================================
+//--addRem()----------------------------------
+var n = async function(event){
+  await query('select * from "remDetail" ').then ((data)=>{
+    console.log(data.rows.length);
+    console.log(data.rowCount);
+  });
+}
+var addRem = async function(event,usId,week,time,medKind){
+      
+    let result;
+       n(event);
+        //讀取資料庫
+        await query('insert into "remDetail" values ($1, $2,$3,$4,$5)', ['1',usId,week,time,medKind])
+            .then((data) => {
+                result = data.rowCount;  //新增資料數 
+            }, (error) => {
+                result = -9;  //執行錯誤
+            });
+      
+      return  console.log('已增加' + result + '筆記錄');
+    
+      
+
+    
+}
+
+//--addUser()---------------------------------
+var addUser = async function(event,usId,usName){
+  var num;
+  await query('SELECT * from "user" where user."usId" LIKE $1',[usId])
+  .then((data) => {
+
+      if(data.rows.length > 0){
+          break
+      }else{
+              //讀取資料庫
+          await query('insert into "user" values ($1,$2,$3)', [usId ,usName,'Y'])
+          .then((data) => {
+            console.log( data.rowCount);  //新增資料數 
+          }, (error) => {
+            console.log("新增使用者錯誤");  //執行錯誤
+            console.log(usId);
+            console.log(usName);
+      });
+      }    
+  }, (error) => {
+      result = -9;  //執行錯誤
+      console.log('****err1');
+  });
+  
+}
+//--save()------------------------------------
+var save = async function(event){
+
+
+  event.reply({
+    "type": "template",
+    "altText": "個資儲存",
+    "template": {
+        "type": "confirm",
+        "text": "你是否願意讓{藥你知道}儲存你的個人資料?",
+        "actions": [
+            {
+              "type": "message",
+              "label": "同意",
+              "text": "同意"
+            },
+            {
+              "type": "message",
+              "label": "不同意",
+              "text": "不同意"
+            }
+        ]
+    }
+  });
+}
+
+
+//==更改結束=========================================
 
 
 //匯出
-module.exports = {remind,med,week,time,yes,no,check};
+module.exports = {remind,med,week,time,yes,no,check,addRem,addUser,save,n};

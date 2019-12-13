@@ -84,6 +84,13 @@ bot.on('message', function(event) {
                 rem = 1
                 add_remind.med(event)
                 break
+
+            case '同意': 
+                add_remind.addUser(event,usId,usName)//--新增使用者資料--資料庫
+                add_remind.med(event) //--確認分類(藥品)
+                
+            case '不同意':
+
             case '查看紀錄':
                 readMed.med(event)
                 break
@@ -115,6 +122,9 @@ bot.on('message', function(event) {
                         "text": "好的！那我會在" + week + time + "時提醒你吃" + med + "的藥!"
                       });
                     rem=0
+
+                    add_remind.addRem(event,usId,week,time,med)
+
                     showTime()
                   }
                   

@@ -20,7 +20,7 @@ var med=async function (event){
           "contents": [
             {
               "type": "text",
-              "text": "藥物種類",
+              "text": "感冒藥",
               "size": "xl",
               "align": "start",
               "weight": "bold"
@@ -38,7 +38,7 @@ var med=async function (event){
                 },
                 {
                   "type": "text",
-                  "text": "週/每天",
+                  "text": "星期一",
                   "size": "lg",
                   "weight": "bold"
                 }
@@ -54,7 +54,7 @@ var med=async function (event){
                 },
                 {
                   "type": "text",
-                  "text": "XX:XX",
+                  "text": "12:00",
                   "size": "lg",
                   "weight": "bold"
                 }
