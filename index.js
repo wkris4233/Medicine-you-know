@@ -85,7 +85,7 @@ bot.on('message', function(event) {
                 break
             case '新增提醒':
                 rem = 1
-                add_remind.med(event)
+                add_remind.save(event)
                 break 
 
             case '同意': 
