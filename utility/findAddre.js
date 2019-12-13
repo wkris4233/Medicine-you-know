@@ -13,9 +13,12 @@ var fetchAddre = async function(addreKey){
     //var addre2 = subString(addreKey,1,CHARINDEX("路",addreKey));
     //addreKey = addreKey.subString(0,(addreKey.indexOf("路")));
     
+    var a = addreKey.indexOf("路")
+    var b = addreKey.substring(0, a+1)
+    //substring('addreKey' from 0 for (position('路' in addreKey)))
 
     //讀取資料庫
-    await query('SELECT top 4 FROM "hosp" WHERE hosp."hospAddre" LIKE $1 ',['%'+addreKey+'%'])
+    await query('SELECT * FROM "hosp" WHERE hosp."hospAddr" LIKE $1 LIMIT 4',['%'+b+'%'])
         .then((data) => {
             
             if(data.rows.length > 0){
