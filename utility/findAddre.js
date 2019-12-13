@@ -8,12 +8,16 @@ const query = require('./asyncDB');
 //------------------------------------------
 var fetchAddre = async function(addreKey){
     //存放結果
-    let result;  
+    let result;
+
     
-    var addre2 = subString(addreKey,1,CHARINDEX('路',addreKey));
-    console.log(addre2);
+    addreKey.subString(0,addreKey.indexof('路'));
+    
+    //var addre2 = subString(addreKey,1,CHARINDEX('路',addreKey));
+    console.log(addreKey);
+
     //讀取資料庫
-    await query('SELECT * from hosp where hosp."hospAddre" like $1',[addre2+'%'])
+    await query('SELECT top 4 substring($1) from hosp where hosp."hospAddre" like $1',[addreKey+'%'])
         .then((data) => {
             
             if(data.rows.length > 0){
