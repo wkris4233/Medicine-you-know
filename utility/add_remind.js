@@ -408,12 +408,7 @@ var addRem = async function(event,usId,week,time,medKind){
 //--addUser()---------------------------------
 var addUser = async function(event,usId,usName){
   var num;
-  await query('SELECT * from "user" where user."usId" LIKE $1',[usId])
-  .then((data) => {
-
-      if(data.rows.length > 0){
-         
-      }else{
+  
               //讀取資料庫
           await query('insert into "user" values ($1,$2,$3)', [usId ,usName,'Y'])
           .then((data) => {
@@ -423,11 +418,7 @@ var addUser = async function(event,usId,usName){
             console.log(usId);
             console.log(usName);
       });
-      }    
-  }, (error) => {
-      result = -9;  //執行錯誤
-      console.log('****err1');
-  });
+     
   
 }
 //--save()------------------------------------
