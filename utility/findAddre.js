@@ -10,8 +10,9 @@ var fetchAddre = async function(addreKey){
     //存放結果
     let result;
 
+
     
-    addreKey.subString(0,addreKey.indexof('路'));
+    addreKey.subString(0,(addreKey.indexOf('路')));
     
     //var addre2 = subString(addreKey,1,CHARINDEX('路',addreKey));
     console.log(addreKey);
