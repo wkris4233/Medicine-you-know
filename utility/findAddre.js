@@ -14,12 +14,12 @@ var fetchAddre = async function(addreKey){
     
     //addreKey.subString(0,(addreKey.indexOf('路')));
     
-    //var addre2 = subString(addreKey,1,CHARINDEX('路',addreKey));
-    
-    console.log(addreKey);
+    //var addre2 = subString(addreKey,1,CHARINDEX("路",addreKey));
+    //addreKey.subString(0,(addreKey.indexOf("路")))
+    //console.log(addreKey);
 
     //讀取資料庫
-    await query('SELECT top 4 substring($1) from hosp where hosp."hospAddre" like addreKey.subString(0,(addreKey.indexOf("路"))) ',['%'+addreKey+'%'])
+    await query('SELECT top 4 substring($1) from hosp where hosp."hospAddre" like subString(addreKey,1,(CHARINDEX("路",addreKey))) ',[+addreKey+'%'])
         .then((data) => {
             
             if(data.rows.length > 0){
