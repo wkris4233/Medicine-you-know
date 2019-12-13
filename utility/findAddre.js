@@ -16,7 +16,7 @@ var fetchAddre = async function(addreKey){
     var a = addreKey.indexOf("路")
     var b = addreKey.substring(0, a+1)
     //substring('addreKey' from 0 for (position('路' in addreKey)))
-
+    console.log(b);
     //讀取資料庫
     await query('SELECT * FROM "hosp" WHERE hosp."hospAddr" LIKE $1 LIMIT 4',['%'+b+'%'])
         .then((data) => {
