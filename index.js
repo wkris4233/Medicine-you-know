@@ -62,9 +62,8 @@ bot.on('postback', function(event) {
 //========================================
 bot.on('message', function(event) {    
   event.source.profile().then(function (profile) {
-    var usId= profile.userId;
+     var usId= profile.userId;
     var usName = profile.displayName;
-    
     var kwt = event.message.type; //--kWtype key word type
     var msg = event.message.text; //--msg
     var addre = event.message.address; //--address
@@ -335,7 +334,8 @@ bot.on('message', function(event) {
        
 }
     //-----------------------------------------
-    });
+    )
+  });
 
 //========================================
 //--showTime()----------------------------
