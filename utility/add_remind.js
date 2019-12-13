@@ -412,7 +412,7 @@ var addUser = async function(event,usId,usName){
   .then((data) => {
 
       if(data.rows.length > 0){
-          break
+         
       }else{
               //讀取資料庫
           await query('insert into "user" values ($1,$2,$3)', [usId ,usName,'Y'])
