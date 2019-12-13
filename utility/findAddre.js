@@ -4,7 +4,7 @@
 const query = require('./asyncDB');
 
 //------------------------------------------
-// 由關鍵字查詢藥品資料
+// 由關鍵字查詢院所資料
 //------------------------------------------
 var fetchAddre = async function(addreKey){
     //存放結果
@@ -15,7 +15,7 @@ var fetchAddre = async function(addreKey){
     
 
     //讀取資料庫
-    await query('SELECT top 4 from "hosp" where hosp."hospAddre" like $1 ',['%'+addreKey+'%'])
+    await query('SELECT top 4 FROM "hosp" WHERE hosp."hospAddre" LIKE $1 ',['%'+addreKey+'%'])
         .then((data) => {
             
             if(data.rows.length > 0){
