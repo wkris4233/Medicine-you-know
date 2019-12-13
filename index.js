@@ -83,7 +83,7 @@ bot.on('message', function(event) {
             case '新增提醒':
                 rem = 1
                 add_remind.med(event)
-                break
+                break 
 
             case '同意': 
                 add_remind.addUser(event,usId,usName)//--新增使用者資料--資料庫
