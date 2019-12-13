@@ -28,6 +28,7 @@ var fetchAddre = async function(addreKey){
         }, (error) => {
             result = -9;  //執行錯誤
             console.log('****err1');
+            console.log(addreKey);
         });
 
     //回傳執行結果
