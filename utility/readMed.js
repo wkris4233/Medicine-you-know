@@ -5,8 +5,31 @@ const query = require('./asyncDB');
 //------------------------------------------
 // 由關鍵字查詢藥品資料
 //------------------------------------------
+var med = async function(usId){
+  //存放結果
+  let result;  
 
-var med=async function (event){
+  //讀取資料庫
+  await query('SELECT * from "remDetail" where remDetail."usId" LIKE $1',[usId])
+      .then((data) => {
+
+          if(data.rows.length > 0){
+              result = data.rows[0];  //學生資料(物件)
+              console.log('****dataFind');
+              medTxt(data.week,data.time,data.medKind)
+          }else{
+              result = -1;  //找不到資料
+          }    
+      }, (error) => {
+          result = -9;  //執行錯誤
+          console.log('****err1');
+      });
+
+  //回傳執行結果
+  return result;  
+}
+
+var medTxt=async function (week,time,medKind){
     event.reply({
       "type": "flex",
       "altText": "Flex Message",
@@ -20,7 +43,7 @@ var med=async function (event){
           "contents": [
             {
               "type": "text",
-              "text": "感冒藥",
+              "text": medKind,
               "size": "xl",
               "align": "start",
               "weight": "bold"
@@ -38,7 +61,7 @@ var med=async function (event){
                 },
                 {
                   "type": "text",
-                  "text": "星期一",
+                  "text": week,
                   "size": "lg",
                   "weight": "bold"
                 }
@@ -54,7 +77,7 @@ var med=async function (event){
                 },
                 {
                   "type": "text",
-                  "text": "12:00",
+                  "text": time,
                   "size": "lg",
                   "weight": "bold"
                 }

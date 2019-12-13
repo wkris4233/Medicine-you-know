@@ -92,7 +92,7 @@ bot.on('message', function(event) {
             case '不同意':
 
             case '查看紀錄':
-                readMed.med(event)
+                readMed.med(event,usId)
                 break
             case '刪除提醒' :
                 del_remind.med(event);
