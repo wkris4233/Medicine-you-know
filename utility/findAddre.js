@@ -11,11 +11,11 @@ var fetchAddre = async function(addreKey){
     let result;
     
     //var addre2 = subString(addreKey,1,CHARINDEX("路",addreKey));
-    addreKey = addreKey.subString(0,(addreKey.indexOf("路")));
+    //addreKey = addreKey.subString(0,(addreKey.indexOf("路")));
     
 
     //讀取資料庫
-    await query('SELECT top 4 from hosp where hosp."hospAddre" like $1 ',['%'+addreKey+'%'])
+    await query('SELECT top 4 from "hosp" where hosp."hospAddre" like $1 ',['%'+addreKey+'%'])
         .then((data) => {
             
             if(data.rows.length > 0){
