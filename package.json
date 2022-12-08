@@ -9,7 +9,7 @@
     "author": "lynn",
     "license": "ISC",
     "dependencies": {
-        "express": "^4.17.1",
+        "express": "^4.18.2",
         "linebot": "^1.5.3",
         "pg": "^7.12.1"
     }
